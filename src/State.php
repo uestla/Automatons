@@ -16,6 +16,20 @@ class State implements Interfaces\IState
 
 
 
+	/**
+	 * @param type state name
+	 * @param type is it initial?
+	 * @param type is it final?
+	 */
+	function __construct($name, $initial, $final)
+	{
+		$this->name = (string) $name;
+		$this->initial = (bool) $initial;
+		$this->final = (bool) $final;
+	}
+
+
+
 	/** @return string */
 	function getName()
 	{

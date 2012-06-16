@@ -10,6 +10,16 @@ class Automaton implements Interfaces\IAutomaton
 
 
 
+	/**
+	 * @param array state list
+	 */
+	function __construct(array $states)
+	{
+		$this->states = $states;
+	}
+
+
+
 	/** @return Automaton */
 	function determinize()
 	{

@@ -21,20 +21,34 @@ class Transition implements Interfaces\Transition
 	 * @param transmition letter
 	 * @param Interfaces\State[] target states
 	 */
-	function __construct(Interfaces\State $state, $letter, array $target = NULL)
+	function __construct(Interfaces\State $state, $letter, array $target)
 	{
 		$this->state = $state;
-		$this->letter = $letter;
+		$this->letter = (string) $letter;
 		$this->target = $target;
 	}
 
 
 
-	/**
-	 * @return Interfaces\State[] target states
-	 */
+	/** @return Interfaces\State */
+	function getState()
+	{
+		return $this->state;
+	}
+
+
+
+	/** @return string */
+	function getLetter()
+	{
+		return $this->letter;
+	}
+
+
+
+	/** @return Interfaces\State[] target states */
 	function getTarget()
 	{
-		return $this->states;
+		return $this->target;
 	}
 }

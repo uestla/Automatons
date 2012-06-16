@@ -42,12 +42,7 @@ class Automaton implements Interfaces\Automaton
 	 */
 	private function setInits(array $inits)
 	{
-		foreach ($inits as $state) {
-			if (!in_array($state, $this->states, TRUE)) {
-				throw new Exceptions\InvalidArgumentException("Initial state '{$state->getName()}' not found in the state array.");
-			}
-		}
-
+		$this->checkStates($inits);
 		$this->inits = $inits;
 		return $this;
 	}
@@ -61,14 +56,25 @@ class Automaton implements Interfaces\Automaton
 	 */
 	private function setFinals(array $finals)
 	{
-		foreach ($finals as $state) {
-			if (!in_array($state, $this->states, TRUE)) {
-				throw new Exceptions\InvalidArgumentException("Final state '{$state->getName()}' not found in the state array.");
-			}
-		}
-
+		$this->checkStates($finals);
 		$this->finals = $finals;
 		return $this;
+	}
+
+
+
+	/**
+	 * @param  Interfaces\State[]
+	 * @return void
+	 * @throws Exceptions\InvalidArgumentException
+	 */
+	private function checkStates(array $states)
+	{
+		foreach ($states as $state) {
+			if (!in_array($state, $this->states, TRUE)) {
+				throw new Exceptions\InvalidArgumentException("State '{$state->getName()}' not found in the state array.");
+			}
+		}
 	}
 
 

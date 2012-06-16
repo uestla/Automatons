@@ -1,6 +1,9 @@
 <?php
 
-class State implements IState
+namespace Automaton;
+
+
+class State implements Interfaces\IState
 {
 	// ...
 }

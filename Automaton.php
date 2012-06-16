@@ -1,6 +1,9 @@
 <?php
 
-class Automaton implements IAutomaton
+namespace Automaton;
+
+
+class Automaton implements Interfaces\IAutomaton
 {
 	/**
 	 * @return Automaton

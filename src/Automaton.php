@@ -11,6 +11,9 @@ class Automaton implements Interfaces\Automaton
 	/** @var array */
 	private $alphabet = NULL;
 
+	/** @var Interfaces\Transition[] */
+	private $transitions = NULL;
+
 	/** @var Interfaces\State[] */
 	private $inits = NULL;
 
@@ -22,13 +25,15 @@ class Automaton implements Interfaces\Automaton
 	/**
 	 * @param Interfaces\State[] state list
 	 * @param array alphabet
+	 * @param Interfaces\Transition[]
 	 * @param Interfaces\State[]
 	 * @param Interfaces\State[]
 	 */
-	function __construct(array $states, array $alphabet, array $inits, array $finals)
+	function __construct(array $states, array $alphabet, array $transitions, array $inits, array $finals)
 	{
 		$this->states = $states;
 		$this->alphabet = $alphabet;
+		$this->setTransitions($transitions);
 		$this->setInits($inits);
 		$this->setFinals($finals);
 	}
@@ -36,8 +41,24 @@ class Automaton implements Interfaces\Automaton
 
 
 	/**
+	 * @param  Interfaces\Transition[]
+	 * @return Interfaces\Automaton
+	 */
+	function setTransitions(array $transitions)
+	{
+		foreach ($transitions as $t) {
+			$this->checkStates($t->getTarget());
+		}
+
+		$this->transitions = $transitions;
+		return $this;
+	}
+
+
+
+	/**
 	 * @param  Interfaces\State[]
-	 * @return Automaton provides fluent interface
+	 * @return Interfaces\Automaton provides fluent interface
 	 * @throws Exceptions\InvalidArgumentException
 	 */
 	private function setInits(array $inits)
@@ -51,7 +72,7 @@ class Automaton implements Interfaces\Automaton
 
 	/**
 	 * @param  Interfaces\State[]
-	 * @return Automaton provides fluent interface
+	 * @return Interfaces\Automaton provides fluent interface
 	 * @throws Exceptions\InvalidArgumentException
 	 */
 	private function setFinals(array $finals)
@@ -79,7 +100,7 @@ class Automaton implements Interfaces\Automaton
 
 
 
-	/** @return Automaton */
+	/** @return Interfaces\Automaton provides fluent interface */
 	function determinize()
 	{
 		// ...
@@ -87,7 +108,7 @@ class Automaton implements Interfaces\Automaton
 
 
 
-	/** @return Automaton */
+	/** @return Interfaces\Automaton provides fluent interface */
 	function minimize()
 	{
 		// ...
@@ -99,7 +120,7 @@ class Automaton implements Interfaces\Automaton
 	 * State getter
 	 *
 	 * @param  string state name
-	 * @return IState
+	 * @return Interfaces\State
 	 * @throws Exceptions\StateNotFoundException
 	 */
 	function & __get($name)

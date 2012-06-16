@@ -25,9 +25,9 @@ class Automaton implements Interfaces\Automaton
 	/**
 	 * @param Interfaces\State[] state list
 	 * @param array alphabet
-	 * @param Interfaces\Transition[]
-	 * @param Interfaces\State[]
-	 * @param Interfaces\State[]
+	 * @param Interfaces\Transition[] transition function
+	 * @param Interfaces\State[] initial states
+	 * @param Interfaces\State[] final states
 	 */
 	function __construct(array $states, array $alphabet, array $transitions, array $inits, array $finals)
 	{

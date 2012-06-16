@@ -3,7 +3,7 @@
 namespace Automaton;
 
 
-class Automaton implements Interfaces\Automaton
+class Automaton implements Interfaces\Automaton, \ArrayAccess
 {
 	/** @var Interfaces\State[] */
 	private $states = NULL;
@@ -177,32 +177,67 @@ class Automaton implements Interfaces\Automaton
 
 
 
-	/**
-	 * State getter
-	 *
-	 * @param  string state name
-	 * @return Interfaces\State
-	 * @throws Exceptions\StateNotFoundException
-	 */
-	function & __get($name)
-	{
-		if (!isset($this->states[$name])) {
-			throw new Exceptions\StateNotFoundException("State '$name' not found.");
-		}
+	/********************************** ArrayAccess interface **********************************/
 
-		return $this->states[$name];
+
+
+	/**
+	 * @param  string state name
+	 * @return bool
+	 */
+	function offsetExists($name)
+	{
+		return $this->getState($name, FALSE);
 	}
 
 
 
 	/**
-	 * State existence tester
+	 * @param  string state name
+	 * @return Interfaces\State|NULL
+	 */
+	function offsetGet($name)
+	{
+		return $this->getState($name);
+	}
+
+
+
+	/** @throws Exceptions\PermissionDeniedException */
+	function offsetSet($name, Interfaces\State $state) {
+		throw new Exceptions\PermissionDeniedException;
+	}
+
+
+
+	/** @throws Exceptions\PermissionDeniedException */
+	function offsetUnset($name)
+	{
+		throw new Exceptions\PermissionDeniedException;
+	}
+
+
+
+	/**
+	 * State getter
 	 *
 	 * @param  string state name
-	 * @return bool
+	 * @param  bool needed?
+	 * @return Interfaces\State|NULL
+	 * @throws Exceptions\StateNotFoundException
 	 */
-	function __isset($name)
+	private function getState($name, $need = TRUE)
 	{
-		return isset($this->states[$name]);
+		foreach ($this->states as $state) {
+			if ($state->getName() === $name) {
+				return $state;
+			}
+		}
+
+		if ($need) {
+			throw new Exceptions\StateNotFoundException("State '{$name}' not found.");
+		}
+
+		return NULL;
 	}
 }

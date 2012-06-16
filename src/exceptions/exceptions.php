@@ -6,4 +6,5 @@ use Exception;
 
 
 class InvalidArgumentException extends Exception {}
+class PermissionDeniedException extends Exception {}
 class StateNotFoundException extends Exception {}

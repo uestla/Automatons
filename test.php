@@ -40,5 +40,6 @@ $initials = array($A);
 $finals = array($A, $C);
 
 $automaton = new Automaton\Automaton($states, $alphabet, $transitions, $initials, $finals);
+$automaton->determinize();
 
 echo "Success.\n";

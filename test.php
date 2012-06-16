@@ -40,6 +40,5 @@ $initials = array($A);
 $finals = array($A, $C);
 
 $automaton = new Automaton\Automaton($states, $alphabet, $transitions, $initials, $finals);
-dump($automaton->B);
-dump(isset($automaton->C));
-dump(isset($automaton->D));
+
+echo "Success.\n";

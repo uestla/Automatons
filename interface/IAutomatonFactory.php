@@ -2,8 +2,6 @@
 
 interface IAutomatonFactory
 {
-	/**
-	 * @return Automaton
-	 */
+	/** @return IAutomaton*/
 	function create();
 }

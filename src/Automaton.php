@@ -130,7 +130,7 @@ class Automaton implements Interfaces\Automaton
 	 */
 	private function setFinals(array $finals)
 	{
-		if (!count($inits)) {
+		if (!count($finals)) {
 			throw new Exceptions\InvalidArgumentException("At least 1 final state required.");
 		}
 

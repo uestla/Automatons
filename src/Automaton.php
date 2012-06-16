@@ -5,9 +5,7 @@ namespace Automaton;
 
 class Automaton implements Interfaces\IAutomaton
 {
-	/**
-	 * @return Automaton
-	 */
+	/** @return Automaton */
 	function determinize()
 	{
 		// ...
@@ -15,9 +13,7 @@ class Automaton implements Interfaces\IAutomaton
 
 
 
-	/**
-	 * @return Automaton
-	 */
+	/** @return Automaton */
 	function minimize()
 	{
 		// ...

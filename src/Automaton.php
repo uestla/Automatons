@@ -36,6 +36,13 @@ class Automaton implements Interfaces\IAutomaton
 
 
 
+	/**
+	 * State getter
+	 *
+	 * @param  string state name
+	 * @return IState
+	 * @throws Exceptions\StateNotFoundException
+	 */
 	function & __get($name)
 	{
 		foreach ($this->states as $state) {
@@ -49,6 +56,12 @@ class Automaton implements Interfaces\IAutomaton
 
 
 
+	/**
+	 * State existence tester
+	 *
+	 * @param  string state name
+	 * @return bool
+	 */
 	function __isset($name)
 	{
 		foreach ($this->states as $state) {

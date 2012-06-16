@@ -19,3 +19,5 @@ $states = array(
 
 $automaton = new Automaton\Automaton($states);
 dump($automaton->B);
+dump(isset($automaton->C));
+dump(isset($automaton->D));

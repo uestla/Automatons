@@ -46,4 +46,17 @@ class Automaton implements Interfaces\IAutomaton
 
 		throw new Exceptions\StateNotFoundException("State '$name' not found.");
 	}
+
+
+
+	function __isset($name)
+	{
+		foreach ($this->states as $state) {
+			if ($state->getName() === $name) {
+				return TRUE;
+			}
+		}
+
+		return FALSE;
+	}
 }

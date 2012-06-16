@@ -204,7 +204,7 @@ class Automaton implements Interfaces\Automaton, \ArrayAccess
 
 
 	/** @throws Exceptions\PermissionDeniedException */
-	function offsetSet($name, Interfaces\State $state) {
+	function offsetSet($name, $state) {
 		throw new Exceptions\PermissionDeniedException;
 	}
 

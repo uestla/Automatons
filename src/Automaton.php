@@ -31,26 +31,12 @@ class Automaton implements Interfaces\Automaton, \ArrayAccess
 	 */
 	function __construct(array $states, array $alphabet, array $transitions, array $inits, array $finals)
 	{
-		$this->setStates($states);
+		$this->states = array_unique($states);
 		$this->alphabet = array_unique($alphabet);
 		sort($this->alphabet);
 		$this->setTransitions($transitions);
 		$this->setInits($inits);
 		$this->setFinals($finals);
-	}
-
-
-
-	/** @param Interfaces\State[] state list */
-	function setStates(array $states)
-	{
-		$this->states = array();
-
-		foreach ($states as $state) {
-			$this->states[$state->getName()] = $state;
-		}
-
-		return $this;
 	}
 
 
@@ -153,11 +139,15 @@ class Automaton implements Interfaces\Automaton, \ArrayAccess
 		}
 
 		foreach ($states as $state) {
-			if (!isset($this->states[$state->getName()])) {
+			if (!isset($this[$state->getName()])) {
 				throw new Exceptions\InvalidArgumentException("State '{$state->getName()}' not found in the state array.");
 			}
 		}
 	}
+
+
+
+	/********************************** manipulations **********************************/
 
 
 
@@ -187,7 +177,7 @@ class Automaton implements Interfaces\Automaton, \ArrayAccess
 	 */
 	function offsetExists($name)
 	{
-		return $this->getState($name, FALSE);
+		return $this->getState($name, FALSE) !== NULL;
 	}
 
 

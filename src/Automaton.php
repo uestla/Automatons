@@ -14,18 +14,23 @@ class Automaton implements Interfaces\Automaton
 	/** @var Interfaces\State[] */
 	private $inits = NULL;
 
+	/** @var Interfaces\State[] */
+	private $finals = NULL;
+
 
 
 	/**
 	 * @param Interfaces\State[] state list
 	 * @param array alphabet
 	 * @param Interfaces\State[]
+	 * @param Interfaces\State[]
 	 */
-	function __construct(array $states, array $alphabet, array $inits)
+	function __construct(array $states, array $alphabet, array $inits, array $finals)
 	{
 		$this->states = $states;
 		$this->alphabet = $alphabet;
 		$this->setInits($inits);
+		$this->setFinals($finals);
 	}
 
 
@@ -44,6 +49,25 @@ class Automaton implements Interfaces\Automaton
 		}
 
 		$this->inits = $inits;
+		return $this;
+	}
+
+
+
+	/**
+	 * @param  Interfaces\State[]
+	 * @return Automaton provides fluent interface
+	 * @throws Exceptions\InvalidArgumentException
+	 */
+	private function setFinals(array $finals)
+	{
+		foreach ($finals as $state) {
+			if (!in_array($state, $this->states, TRUE)) {
+				throw new Exceptions\InvalidArgumentException("Final state '{$state->getName()}' not found in the state array.");
+			}
+		}
+
+		$this->finals = $finals;
 		return $this;
 	}
 

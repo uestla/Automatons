@@ -20,8 +20,9 @@ $C = new Automaton\State('C', FALSE, FALSE);
 $states = array($A, $B, $C);
 $alphabet = array('a', 'b', 'c');
 $initials = array($B);
+$finals = array($B, $C);
 
-$automaton = new Automaton\Automaton($states, $alphabet, $initials);
+$automaton = new Automaton\Automaton($states, $alphabet, $initials, $finals);
 dump($automaton->B);
 dump(isset($automaton->C));
 dump(isset($automaton->D));

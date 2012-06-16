@@ -20,12 +20,24 @@ $B = new Automaton\State('B', FALSE, FALSE);
 $C = new Automaton\State('C', FALSE, FALSE);
 
 $states = array($A, $B, $C);
-$alphabet = array('a', 'b', 'c');
-$transitions = array(new Automaton\Transition($A, 'a', array($A, $B)));
-$transitions = array(new Automaton\Transition($A, 'b', array($C)));
-$transitions = array(new Automaton\Transition($A, 'c', array()));
-$initials = array($B);
-$finals = array($B, $C);
+$alphabet = array('a', 'b', 'c', '');
+
+$transitions = array();
+$transitions[] = new Automaton\Transition($A, 'a', array($B));
+$transitions[] = new Automaton\Transition($A, 'b', array());
+$transitions[] = new Automaton\Transition($A, 'c', array($C, $A));
+$transitions[] = new Automaton\Transition($A, '', array());
+$transitions[] = new Automaton\Transition($B, 'a', array($A));
+$transitions[] = new Automaton\Transition($B, 'b', array($A));
+$transitions[] = new Automaton\Transition($B, 'c', array($A, $B));
+$transitions[] = new Automaton\Transition($B, '', array($A));
+$transitions[] = new Automaton\Transition($C, 'a', array($C));
+$transitions[] = new Automaton\Transition($C, 'b', array($C));
+$transitions[] = new Automaton\Transition($C, 'c', array($C));
+$transitions[] = new Automaton\Transition($C, '', array());
+
+$initials = array($A);
+$finals = array($A, $C);
 
 $automaton = new Automaton\Automaton($states, $alphabet, $transitions, $initials, $finals);
 dump($automaton->B);

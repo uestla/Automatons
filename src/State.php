@@ -10,9 +10,7 @@ class State implements Interfaces\State
 
 
 
-	/**
-	 * @param string state name
-	 */
+	/** @param string state name */
 	function __construct($name)
 	{
 		$this->name = (string) $name;
@@ -22,6 +20,14 @@ class State implements Interfaces\State
 
 	/** @return string */
 	function getName()
+	{
+		return $this->name;
+	}
+
+
+
+	/** @return string state name */
+	function __toString()
 	{
 		return $this->name;
 	}

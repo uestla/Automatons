@@ -25,7 +25,7 @@ class Transition implements Interfaces\Transition
 	{
 		$this->state = $state;
 		$this->letter = (string) $letter;
-		$this->target = $target;
+		$this->target = array_unique($target);
 	}
 
 

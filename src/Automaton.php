@@ -42,16 +42,27 @@ class Automaton implements Interfaces\Automaton
 
 
 	/**
+	 * Checks if:
+	 * - all states exist (even in the target array)
+	 * - all letters exist
+	 * - each state has its transition for each letter
+	 * - there are no multiple transitions for certain state and letter
+	 *
 	 * @param  Interfaces\Transition[]
 	 * @return Interfaces\Automaton
 	 * @throws Exceptions\InvalidArgumentException
 	 */
 	function setTransitions(array $transitions)
 	{
+		// [ STATE_NAME => [ LETTER => TRUE, LETTER => TRUE, ... ], ... ]
 		$tmp = array();
 
 		foreach ($transitions as $t) {
 			$this->checkStates($t->getState());
+
+			if (!in_array($t->getLetter(), $this->alphabet, TRUE)) {
+				throw new Exceptions\InvalidArgumentException("Letter '{$t->getLetter()}' not found in the alphabet.");
+			}
 
 			if (!isset($tmp[$t->getState()->getName()])) {
 				$tmp[$t->getState()->getName()] = array();
@@ -62,6 +73,16 @@ class Automaton implements Interfaces\Automaton
 
 			$tmp[$t->getState()->getName()][$t->getLetter()] = TRUE;
 			$this->checkStates($t->getTarget());
+		}
+
+		if (count($tmp) !== count($this->states)) {
+			throw new Exceptions\InvalidArgumentException("Transition for some states weren't specified.");
+		}
+
+		foreach ($tmp as $name => $target) {
+			if (count($target) !== count($this->alphabet)) {
+				throw new Exceptions\InvalidArgumentException("Missing transition from state '{$name}' for some letter(s).");
+			}
 		}
 
 		$this->transitions = $transitions;

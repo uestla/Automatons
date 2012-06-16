@@ -156,7 +156,7 @@ class Automaton implements Interfaces\Automaton
 	/** @return Interfaces\Automaton provides fluent interface */
 	function determinize()
 	{
-		// ...
+		return $this;
 	}
 
 
@@ -164,7 +164,7 @@ class Automaton implements Interfaces\Automaton
 	/** @return Interfaces\Automaton provides fluent interface */
 	function minimize()
 	{
-		// ...
+		return $this;
 	}
 
 

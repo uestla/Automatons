@@ -3,7 +3,7 @@
 namespace Automaton;
 
 
-class Automaton implements Interfaces\IAutomaton
+class Automaton implements Interfaces\Automaton
 {
 	/** @var IState[] */
 	private $states = array();

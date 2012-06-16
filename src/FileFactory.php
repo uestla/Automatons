@@ -3,7 +3,7 @@
 namespace Automaton;
 
 
-class FileFactory implements Interfaces\IAutomatonFactory
+class FileFactory implements Interfaces\AutomatonFactory
 {
 	/** @return IAutomaton*/
 	function create()

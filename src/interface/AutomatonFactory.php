@@ -3,7 +3,7 @@
 namespace Automaton\Interfaces;
 
 
-interface IAutomatonFactory
+interface AutomatonFactory
 {
 	/** @return IAutomaton*/
 	function create();

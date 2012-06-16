@@ -3,7 +3,7 @@
 namespace Automaton\Interfaces;
 
 
-interface IState
+interface State
 {
 	/** @return string */
 	function getName();

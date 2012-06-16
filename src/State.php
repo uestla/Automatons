@@ -3,7 +3,7 @@
 namespace Automaton;
 
 
-class State implements Interfaces\IState
+class State implements Interfaces\State
 {
 	/** @var string */
 	private $name;

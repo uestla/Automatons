@@ -31,12 +31,26 @@ class Automaton implements Interfaces\Automaton
 	 */
 	function __construct(array $states, array $alphabet, array $transitions, array $inits, array $finals)
 	{
-		$this->states = $states;
+		$this->setStates($states);
 		$this->alphabet = array_unique($alphabet);
 		sort($this->alphabet);
 		$this->setTransitions($transitions);
 		$this->setInits($inits);
 		$this->setFinals($finals);
+	}
+
+
+
+	/** @param Interfaces\State[] state list */
+	function setStates(array $states)
+	{
+		$this->states = array();
+
+		foreach ($states as $state) {
+			$this->states[$state->getName()] = $state;
+		}
+
+		return $this;
 	}
 
 
@@ -131,7 +145,7 @@ class Automaton implements Interfaces\Automaton
 		}
 
 		foreach ($states as $state) {
-			if (!in_array($state, $this->states, TRUE)) {
+			if (!isset($this->states[$state->getName()])) {
 				throw new Exceptions\InvalidArgumentException("State '{$state->getName()}' not found in the state array.");
 			}
 		}
@@ -164,13 +178,11 @@ class Automaton implements Interfaces\Automaton
 	 */
 	function & __get($name)
 	{
-		foreach ($this->states as $state) {
-			if ($state->getName() === $name) {
-				return $state;
-			}
+		if (!isset($this->states[$name])) {
+			throw new Exceptions\StateNotFoundException("State '$name' not found.");
 		}
 
-		throw new Exceptions\StateNotFoundException("State '$name' not found.");
+		return $this->states[$name];
 	}
 
 
@@ -183,12 +195,6 @@ class Automaton implements Interfaces\Automaton
 	 */
 	function __isset($name)
 	{
-		foreach ($this->states as $state) {
-			if ($state->getName() === $name) {
-				return TRUE;
-			}
-		}
-
-		return FALSE;
+		return isset($this->states[$name]);
 	}
 }

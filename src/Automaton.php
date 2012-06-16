@@ -5,17 +5,46 @@ namespace Automaton;
 
 class Automaton implements Interfaces\Automaton
 {
-	/** @var IState[] */
-	private $states = array();
+	/** @var Interfaces\State[] */
+	private $states = NULL;
+
+	/** @var array */
+	private $alphabet = NULL;
+
+	/** @var Interfaces\State[] */
+	private $inits = NULL;
 
 
 
 	/**
-	 * @param array state list
+	 * @param Interfaces\State[] state list
+	 * @param array alphabet
+	 * @param Interfaces\State[]
 	 */
-	function __construct(array $states)
+	function __construct(array $states, array $alphabet, array $inits)
 	{
 		$this->states = $states;
+		$this->alphabet = $alphabet;
+		$this->setInits($inits);
+	}
+
+
+
+	/**
+	 * @param  Interfaces\State[]
+	 * @return Automaton provides fluent interface
+	 * @throws Exceptions\InvalidArgumentException
+	 */
+	private function setInits(array $inits)
+	{
+		foreach ($inits as $state) {
+			if (!in_array($state, $this->states, TRUE)) {
+				throw new Exceptions\InvalidArgumentException("Initial state '{$state->getName()}' not found in the state array.");
+			}
+		}
+
+		$this->inits = $inits;
+		return $this;
 	}
 
 

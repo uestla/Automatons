@@ -5,7 +5,7 @@ namespace Automaton;
 
 class FileFactory implements Interfaces\AutomatonFactory
 {
-	/** @return IAutomaton*/
+	/** @return Interfaces\Automaton */
 	function create()
 	{
 		// ...

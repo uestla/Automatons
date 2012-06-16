@@ -3,11 +3,11 @@
 namespace Automaton\Interfaces;
 
 
-interface IAutomaton
+interface Automaton
 {
-	/** @return IAutomaton */
+	/** @return Automaton */
 	function determinize();
 
-	/** @return IAutomaton */
+	/** @return Automaton */
 	function minimize();
 }

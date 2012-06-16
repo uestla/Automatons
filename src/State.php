@@ -11,7 +11,7 @@ class State implements Interfaces\State
 
 
 	/**
-	 * @param type state name
+	 * @param string state name
 	 */
 	function __construct($name)
 	{

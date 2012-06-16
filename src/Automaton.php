@@ -112,6 +112,10 @@ class Automaton implements Interfaces\Automaton
 	 */
 	private function setInits(array $inits)
 	{
+		if (!count($inits)) {
+			throw new Exceptions\InvalidArgumentException("At least 1 initial state required.");
+		}
+
 		$this->checkStates($inits);
 		$this->inits = $inits;
 		return $this;
@@ -126,6 +130,10 @@ class Automaton implements Interfaces\Automaton
 	 */
 	private function setFinals(array $finals)
 	{
+		if (!count($inits)) {
+			throw new Exceptions\InvalidArgumentException("At least 1 final state required.");
+		}
+
 		$this->checkStates($finals);
 		$this->finals = $finals;
 		return $this;

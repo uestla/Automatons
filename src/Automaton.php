@@ -78,15 +78,18 @@ class Automaton
 			}
 		}
 
-		foreach ($finals as $state) {
+		foreach ($finals as $key => $state) {
 			if (!isset($this->states[$state])) {
 				throw new InvalidStateException("State '{$state}' not found.");
 			}
+
+			$finals[$state] = TRUE;
+			unset($finals[$key]);
 		}
 
 		ksort($states);
 		sort($initials);
-		sort($finals);
+		ksort($finals);
 
 		$this->initials = $initials;
 		$this->finals = $finals;
@@ -115,7 +118,7 @@ class Automaton
 				$final = FALSE;
 
 				foreach ($targets as $state) {
-					if (!$final && in_array($state, $this->finals, TRUE)) {
+					if (!$final && isset($this->finals[$state])) {
 						$final = TRUE;
 					}
 
@@ -132,8 +135,8 @@ class Automaton
 					$queue[] = $ts;
 				}
 
-				if ($final && !in_array($name, $finals, TRUE)) {
-					$finals[] = $name;
+				if ($final && !isset($finals[$name])) {
+					$finals[$name] = TRUE;
 				}
 
 				$states[$name][$letter] = $this->generateStateName($ts);
@@ -142,11 +145,12 @@ class Automaton
 
 		ksort($states);
 		sort($initials);
-		sort($finals);
+		ksort($finals);
 
 		$this->states = $states;
 		$this->initials = $initials;
 		$this->finals = $finals;
+		return $this;
 	}
 
 
@@ -185,6 +189,7 @@ class Automaton
 		}
 
 		unset($this->alphabet[array_search('', $this->alphabet, TRUE)]);
+		return $this;
 	}
 
 

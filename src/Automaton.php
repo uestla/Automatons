@@ -53,8 +53,9 @@ class Automaton
 		foreach ($states as $state => $transitions) {
 			if ($this->alphabet === NULL) {
 				$this->alphabet = array_keys($transitions);
+				sort($this->alphabet);
 
-			} elseif (array_keys($transitions) !== $this->alphabet) {
+			} elseif (count(array_diff (array_keys($transitions), $this->alphabet))) {
 				throw new InvalidStateException("Alphabet has to be the same for all transition.");
 			}
 
@@ -69,6 +70,7 @@ class Automaton
 				sort($transitions[$letter]);
 			}
 
+			ksort($transitions);
 			$this->states[$state] = $transitions;
 		}
 
@@ -106,8 +108,8 @@ class Automaton
 		$states = $initials = $finals = $queue = array();
 		$queue[] = $this->initials;
 
-		while (list(, $targets) = each($queue)) {
-			$states[ $name = $this->generateStateName($targets) ] = array();
+		while (list(, $ss) = each($queue)) {
+			$states[ $name = $this->generateStateName($ss) ] = array();
 
 			if (!count($initials)) {
 				$initials[] = $name;
@@ -117,7 +119,7 @@ class Automaton
 				$ts = array();
 				$final = FALSE;
 
-				foreach ($targets as $state) {
+				foreach ($ss as $state) {
 					if (!$final && isset($this->finals[$state])) {
 						$final = TRUE;
 					}
@@ -139,7 +141,7 @@ class Automaton
 					$finals[$name] = TRUE;
 				}
 
-				$states[$name][$letter] = $this->generateStateName($ts);
+				$states[$name][$letter] = array($this->generateStateName($ts));
 			}
 		}
 

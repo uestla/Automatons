@@ -32,5 +32,5 @@ $initials = array('A');
 $finals = array('A', 'C');
 
 $automaton = new Automaton($states, $initials, $finals);
-$automaton->determinize();
+$automaton->determinize()->normalize();
 dump($automaton);

@@ -196,6 +196,56 @@ class Automaton
 
 
 
+	function normalize()
+	{
+		$max = 0;
+		$names = array();
+		$list = $this->initials;
+
+		while (list(, $state) = each($list)) {
+			if (!isset($names[$state])) {
+				$names[$state] = ++$max;
+			}
+
+			foreach ($this->states[$state] as $targets) {
+				foreach ($targets as $target) {
+					if (!isset($names[$target])) {
+						$names[$target] = ++$max;
+						$list[] = $target;
+					}
+				}
+			}
+		}
+
+		foreach ($this->states as $state => $transitions) {
+			foreach ($transitions as & $targets) {
+				foreach ($targets as $key => $target) {
+					$targets[$key] = $names[$target];
+				}
+			}
+
+			unset($this->states[$state]);
+			$this->states[$names[$state]] = $transitions;
+		}
+
+		foreach ($this->initials as $key => $state) {
+			$this->initials[$key] = $names[$state];
+		}
+
+		foreach ($this->finals as $state => $val) {
+			unset($this->finals[$state]);
+			$this->finals[$names[$state]] = $val;
+		}
+
+		ksort($this->states);
+		sort($this->initials);
+		ksort($this->finals);
+
+		return $this;
+	}
+
+
+
 	function generateStateName(array $list)
 	{
 		return '{' . implode(',', $list) . '}';

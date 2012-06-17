@@ -41,25 +41,27 @@ class Automaton
 	/** @var array */
 	private $finals = NULL;
 
+	/** @var array */
+	private $alphabet = NULL;
+
 
 
 	function __construct(array $states, array $initials, array $finals)
 	{
 		$this->states = array();
-		$alphabet = NULL;
 
-		foreach ($states as $name => $transitions) {
-			if ($alphabet === NULL) {
-				$alphabet = array_keys($transitions);
+		foreach ($states as $state => $transitions) {
+			if ($this->alphabet === NULL) {
+				$this->alphabet = array_keys($transitions);
 
-			} elseif (array_keys($transitions) !== $alphabet) {
+			} elseif (array_keys($transitions) !== $this->alphabet) {
 				throw new InvalidStateException("Alphabet has to be the same for all transition.");
 			}
 
 			foreach ($transitions as $letter => $targets) {
-				foreach ($targets as $state) {
-					if (!isset($states[$state])) {
-						throw new InvalidStateException("State '{$state}' not found.");
+				foreach ($targets as $target) {
+					if (!isset($states[$target])) {
+						throw new InvalidStateException("State '{$target}' not found.");
 					}
 				}
 
@@ -67,7 +69,7 @@ class Automaton
 				sort($transitions[$letter]);
 			}
 
-			$this->states[$name] = $transitions;
+			$this->states[$state] = $transitions;
 		}
 
 		foreach ($initials as $state) {
@@ -84,6 +86,49 @@ class Automaton
 
 		$this->initials = $initials;
 		$this->finals = $finals;
+	}
+
+
+
+	function determinize()
+	{
+		if (in_array('', $this->alphabet, TRUE)) {
+			$this->removeEpsilon();
+		}
+	}
+
+
+
+	function removeEpsilon()
+	{
+		foreach ($this->states as & $transitions) {
+			$queue = $transitions[''];
+
+			while (list(, $state) = each($queue)) {
+				foreach ($this->states[$state] as $letter => $targets) {
+					if ($letter === '') {
+						foreach ($targets as $target) {
+							if (!in_array($target, $queue, TRUE)) {
+								$queue[] = $target;
+							}
+						}
+
+						continue;
+					}
+
+					foreach ($targets as $target) {
+						if (!in_array($target, $transitions[$letter], TRUE)) {
+							$transitions[$letter][] = $target;
+							sort($transitions[$letter]);
+						}
+					}
+				}
+			}
+
+			unset($transitions['']);
+		}
+
+		unset($this->alphabet[array_search('', $this->alphabet, TRUE)]);
 	}
 }
 

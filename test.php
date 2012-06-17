@@ -5,6 +5,7 @@ require_once __DIR__ . '/src/Automaton.php';
 
 Nette\Diagnostics\Debugger::enable( Nette\Diagnostics\Debugger::DEVELOPMENT );
 Nette\Diagnostics\Debugger::$maxDepth = FALSE;
+Nette\Diagnostics\Debugger::$strictMode = TRUE;
 
 $states = array(
 	'A' => array(
@@ -31,4 +32,5 @@ $initials = array('A');
 $finals = array('A', 'C');
 
 $automaton = new Automaton($states, $initials, $finals);
-dump($automaton); die();
+$automaton->determinize();
+dump($automaton);

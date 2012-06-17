@@ -84,6 +84,10 @@ class Automaton
 			}
 		}
 
+		ksort($states);
+		sort($initials);
+		sort($finals);
+
 		$this->initials = $initials;
 		$this->finals = $finals;
 	}
@@ -95,6 +99,54 @@ class Automaton
 		if (in_array('', $this->alphabet, TRUE)) {
 			$this->removeEpsilon();
 		}
+
+		$states = $initials = $finals = $queue = array();
+		$queue[] = $this->initials;
+
+		while (list(, $targets) = each($queue)) {
+			$states[ $name = $this->generateStateName($targets) ] = array();
+
+			if (!count($initials)) {
+				$initials[] = $name;
+			}
+
+			foreach ($this->alphabet as $letter) {
+				$ts = array();
+				$final = FALSE;
+
+				foreach ($targets as $state) {
+					if (!$final && in_array($state, $this->finals, TRUE)) {
+						$final = TRUE;
+					}
+
+					foreach ($this->states[$state][$letter] as $target) {
+						if (!in_array($target, $ts, TRUE)) {
+							$ts[] = $target;
+						}
+					}
+				}
+
+				sort($ts);
+
+				if (!in_array($ts, $queue, TRUE)) {
+					$queue[] = $ts;
+				}
+
+				if ($final && !in_array($name, $finals, TRUE)) {
+					$finals[] = $name;
+				}
+
+				$states[$name][$letter] = $this->generateStateName($ts);
+			}
+		}
+
+		ksort($states);
+		sort($initials);
+		sort($finals);
+
+		$this->states = $states;
+		$this->initials = $initials;
+		$this->finals = $finals;
 	}
 
 
@@ -129,6 +181,13 @@ class Automaton
 		}
 
 		unset($this->alphabet[array_search('', $this->alphabet, TRUE)]);
+	}
+
+
+
+	function generateStateName(array $list)
+	{
+		return '{' . implode(',', $list) . '}';
 	}
 }
 

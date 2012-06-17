@@ -153,6 +153,10 @@ class Automaton
 
 	function removeEpsilon()
 	{
+		if (!in_array('', $this->alphabet, TRUE)) {
+			throw new InvalidStateException("Epsilon not found in the alphabet.");
+		}
+
 		foreach ($this->states as & $transitions) {
 			$queue = $transitions[''];
 

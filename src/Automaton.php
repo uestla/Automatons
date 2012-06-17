@@ -51,6 +51,10 @@ class Automaton
 
 	function __construct(array $states, array $initials, array $finals)
 	{
+		if (!count($states) || !count($initials) || !count($finals)) {
+			throw new InvalidStateException("At least one state, one initial and one final state required.");
+		}
+
 		$this->states = array();
 
 		foreach ($states as $state => $transitions) {
@@ -58,7 +62,7 @@ class Automaton
 				$this->alphabet = array_keys($transitions);
 				sort($this->alphabet);
 
-			} elseif (count(array_diff (array_keys($transitions), $this->alphabet))) {
+			} elseif (count(array_diff(array_keys($transitions), $this->alphabet))) {
 				throw new InvalidStateException("Alphabet has to be the same for all transition.");
 			}
 
@@ -96,7 +100,7 @@ class Automaton
 		sort($initials);
 		ksort($finals);
 
-		$this->initials = $initials;
+		$this->initials = array_unique($initials);
 		$this->finals = $finals;
 	}
 

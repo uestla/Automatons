@@ -1,5 +1,8 @@
 <?php
 
+namespace Automaton;
+
+
 /**
  * States
  * ------

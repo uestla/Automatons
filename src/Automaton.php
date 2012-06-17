@@ -257,4 +257,4 @@ class Automaton
 
 
 
-class InvalidStateException extends Exception {}
+class InvalidStateException extends \Exception {}

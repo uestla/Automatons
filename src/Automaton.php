@@ -209,44 +209,8 @@ class Automaton
 
 	function minimize()
 	{
-		$groups['II'] = $groups['I'] = $groups = $stategroups = array();
-
-		foreach ($this->states as $state => $t) {
-			$groups[ $stategroups[$state] = isset($this->finals[$state]) ? 'II' : 'I' ][] = $state;
-		}
-
-		$states = $this->createGroupStates($stategroups);
-
-		do {
-			$max = 0;
-			$new = array();
-
-			dump($new); die();
-
-			break;
-
-		} while (TRUE);
-
+		// TODO...
 		return $this;
-	}
-
-
-
-	private function createGroupStates(array $stategroups)
-	{
-		$states = array();
-		foreach ($this->states as $state => $transitions) {
-			$states[$state] = array();
-			foreach ($transitions as $letter => $targets) {
-				if (count($targets) !== 1) {
-					throw new InvalidStateException("Automaton not determinized.");
-				}
-
-				$states[$state][$letter] = array($stategroups[$targets[0]]);
-			}
-		}
-
-		return $states;
 	}
 
 

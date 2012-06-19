@@ -44,12 +44,8 @@ class FileFactory implements IFactory
 			}
 
 			if (!count($alphabet)) {
+				$line = preg_replace('#^\s*(?:' . preg_quote(static::NFA, '#') . '|' . preg_quote(static::DFA,'#') . ')?\s*#', '', $line);
 				$parts = preg_split('#\s+#', $line);
-				$type = array_shift($parts);
-
-				if ($type !== static::NFA && $type !== static::DFA) {
-					throw new WrongFormatException("Either '" . static::NFA . "' or '" . static::DFA . "' expected, '" . $type . "' given.");
-				}
 
 				if (!count($parts)) {
 					throw new InvalidInputException("Empty alphabet detected.");
@@ -81,41 +77,44 @@ class FileFactory implements IFactory
 			$f = preg_quote(static::FINAL_S, '#');
 			$pattern = "#^(?:${i}${f}|${f}${i}|$i|$f)#";
 
-			if (preg_match($pattern, $state, $m)) {
-				$state = substr($state, strlen($m[0]));
+			$match = preg_match($pattern, $state, $m);
+			$ss = explode(static::STATE_SEPARATOR, $match ? substr($state, strlen($m[0])) : $state);
 
+			foreach ($ss as $state) {
 				if (!strlen($state)) {
 					throw new InvalidInputException("State name not specified.");
 				}
 
-				if ($m[0] === '><' || $m[0] === '<>') {
-					$initials[] = $state;
-					$finals[] = $state;
+				if ($match) {
+					if ($m[0] === '><' || $m[0] === '<>') {
+						$initials[] = $state;
+						$finals[] = $state;
 
-				} elseif ($m[0] === '>') {
-					$initials[] = $state;
+					} elseif ($m[0] === '>') {
+						$initials[] = $state;
 
-				} elseif ($m[0] === '<') {
-					$finals[] = $state;
-				}
-			}
-
-			if (!isset($states[$state])) {
-				$states[$state] = array();
-			}
-
-			foreach ($transitions as $offset => $targets) {
-				$targets = $targets === static::EMPTY_TARGET ? array() : explode(static::STATE_SEPARATOR, $targets);
-
-				if (isset($states[$state][$alphabet[$offset]])) {
-					foreach ($targets as $target) {
-						if (!in_array($target, $states[$state][$alphabet[$offset]], TRUE)) {
-							$states[$state][$alphabet[$offset]][] = $target;
-						}
+					} elseif ($m[0] === '<') {
+						$finals[] = $state;
 					}
+				}
 
-				} else {
-					$states[$state][$alphabet[$offset]] = $targets;
+				if (!isset($states[$state])) {
+					$states[$state] = array();
+				}
+
+				foreach ($transitions as $offset => $targets) {
+					$targets = $targets === static::EMPTY_TARGET ? array() : explode(static::STATE_SEPARATOR, $targets);
+
+					if (isset($states[$state][$alphabet[$offset]])) {
+						foreach ($targets as $target) {
+							if (!in_array($target, $states[$state][$alphabet[$offset]], TRUE)) {
+								$states[$state][$alphabet[$offset]][] = $target;
+							}
+						}
+
+					} else {
+						$states[$state][$alphabet[$offset]] = $targets;
+					}
 				}
 			}
 		}

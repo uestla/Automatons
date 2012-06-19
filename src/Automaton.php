@@ -60,6 +60,10 @@ class Automaton
 		foreach ($states as $state => $transitions) {
 			if ($this->alphabet === NULL) {
 				$this->alphabet = array_keys($transitions);
+				if (!count($this->alphabet) || $this->alphabet === array('')) {
+					throw new InvalidStateException("At least one non-epsilon letter required in the alphabet.");
+				}
+
 				sort($this->alphabet);
 
 			} elseif (count(array_diff(array_keys($transitions), $this->alphabet))) {
@@ -96,7 +100,7 @@ class Automaton
 			unset($finals[$key]);
 		}
 
-		ksort($states);
+		ksort($this->states);
 		sort($initials);
 		ksort($finals);
 
@@ -127,7 +131,7 @@ class Automaton
 				$final = FALSE;
 
 				foreach ($ss as $state) {
-					if (!$final && isset($this->finals[$state])) {
+					if (!$final && $this->isFinalState($state)) {
 						$final = TRUE;
 					}
 
@@ -300,6 +304,13 @@ class Automaton
 	function generateStateName(array $list)
 	{
 		return '{' . implode(',', $list) . '}';
+	}
+
+
+
+	function isFinalState($state)
+	{
+		return isset($this->finals[$state]);
 	}
 }
 

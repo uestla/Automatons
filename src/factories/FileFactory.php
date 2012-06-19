@@ -100,9 +100,23 @@ class FileFactory implements IFactory
 				}
 			}
 
-			$states[$state] = array();
+			if (!isset($states[$state])) {
+				$states[$state] = array();
+			}
+
 			foreach ($transitions as $offset => $targets) {
-				$states[$state][$alphabet[$offset]] = $targets === static::EMPTY_TARGET ? array() : explode(static::STATE_SEPARATOR, $targets);
+				$targets = $targets === static::EMPTY_TARGET ? array() : explode(static::STATE_SEPARATOR, $targets);
+
+				if (isset($states[$state][$alphabet[$offset]])) {
+					foreach ($targets as $target) {
+						if (!in_array($target, $states[$state][$alphabet[$offset]], TRUE)) {
+							$states[$state][$alphabet[$offset]][] = $target;
+						}
+					}
+
+				} else {
+					$states[$state][$alphabet[$offset]] = $targets;
+				}
 			}
 		}
 

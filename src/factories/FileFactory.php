@@ -77,25 +77,26 @@ class FileFactory implements IFactory
 			$f = preg_quote(static::FINAL_S, '#');
 			$pattern = "#^(?:${i}${f}|${f}${i}|$i|$f)#";
 
-			$match = preg_match($pattern, $state, $m);
-			$ss = explode(static::STATE_SEPARATOR, $match ? substr($state, strlen($m[0])) : $state);
+			if ($matched = preg_match($pattern, $state, $m)) {
+				$state = substr($state, strlen($m[0]));
+			}
+
+			$init = $matched && strpos($m[0], static::INITIAL_S) !== FALSE;
+			$final = $matched && strpos($m[0], static::FINAL_S) !== FALSE;
+
+			$ss = explode(static::STATE_SEPARATOR, $state);
 
 			foreach ($ss as $state) {
 				if (!strlen($state)) {
 					throw new InvalidInputException("State name not specified.");
 				}
 
-				if ($match) {
-					if ($m[0] === '><' || $m[0] === '<>') {
-						$initials[] = $state;
-						$finals[] = $state;
+				if ($init) {
+					$initials[] = $state;
+				}
 
-					} elseif ($m[0] === '>') {
-						$initials[] = $state;
-
-					} elseif ($m[0] === '<') {
-						$finals[] = $state;
-					}
+				if ($final) {
+					$finals[] = $state;
 				}
 
 				if (!isset($states[$state])) {

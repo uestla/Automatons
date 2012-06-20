@@ -73,18 +73,8 @@ class FileFactory implements IFactory
 				throw new InvalidInputException("Transition and letter count don't match.");
 			}
 
-			$i = preg_quote(static::INITIAL_S, '#');
-			$f = preg_quote(static::FINAL_S, '#');
-			$pattern = "#^(?:${i}${f}|${f}${i}|$i|$f)#";
-
-			if ($matched = preg_match($pattern, $state, $m)) {
-				$state = substr($state, strlen($m[0]));
-			}
-
-			$init = $matched && strpos($m[0], static::INITIAL_S) !== FALSE;
-			$final = $matched && strpos($m[0], static::FINAL_S) !== FALSE;
-
-			$ss = explode(static::STATE_SEPARATOR, $state);
+			$ss = array();
+			$this->parseStateName($state, $ss, $init, $final);
 
 			foreach ($ss as $state) {
 				if (!strlen($state)) {
@@ -121,6 +111,32 @@ class FileFactory implements IFactory
 		}
 
 		return new Automaton($states, $initials, $finals);
+	}
+
+
+
+	/**
+	 * @param  string
+	 * @param  array
+	 * @param  bool
+	 * @param  bool
+	 * @return void
+	 */
+	private function parseStateName($input, array & $states, & $init, & $final)
+	{
+		$i = preg_quote(static::INITIAL_S, '#');
+		$f = preg_quote(static::FINAL_S, '#');
+		$pattern = "#^(?:${i}${f}|${f}${i}|$i|$f)#";
+		$matched = preg_match($pattern, $input, $m);
+
+		if ($matched) {
+			$input = substr($input, strlen($m[0]));
+		}
+
+		$init = $matched && strpos($m[0], static::INITIAL_S) !== FALSE;
+		$final = $matched && strpos($m[0], static::FINAL_S) !== FALSE;
+
+		$states = explode(static::STATE_SEPARATOR, $input);
 	}
 }
 

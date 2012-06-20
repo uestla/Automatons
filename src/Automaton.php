@@ -140,9 +140,7 @@ class Automaton
 				$final = FALSE;
 
 				foreach ($ss as $state => $foo) {
-					if (!$final && isset($this->finals[$state])) {
-						$final = TRUE;
-					}
+					isset($this->finals[$state]) && ($final = TRUE);
 
 					foreach ($this->states[$state][$letter] as $target => $foo) {
 						$ts[$target] = TRUE;
@@ -151,7 +149,7 @@ class Automaton
 
 				ksort($ts);
 
-				$queue[ $tsname = $this->generateStateName(array_keys($ts)) ] = $ts;
+				!isset($queue[ $tsname = $this->generateStateName(array_keys($ts)) ]) && ($queue[$tsname] = $ts);
 				$final && $finals[$name] = TRUE;
 				$states[$name][$letter] = array($tsname => TRUE);
 			}

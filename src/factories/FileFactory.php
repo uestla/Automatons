@@ -126,8 +126,7 @@ class FileFactory implements IFactory
 	{
 		$i = preg_quote(static::INITIAL_S, '#');
 		$f = preg_quote(static::FINAL_S, '#');
-		$pattern = "#^(?:${i}${f}|${f}${i}|$i|$f)#";
-		$matched = preg_match($pattern, $input, $m);
+		$matched = preg_match("#^(?:${i}${f}|${f}${i}|$i|$f)#", $input, $m);
 
 		if ($matched) {
 			$input = substr($input, strlen($m[0]));

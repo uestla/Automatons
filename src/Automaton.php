@@ -47,6 +47,9 @@ class Automaton
 	/** @var array */
 	private $alphabet = NULL;
 
+	/** @var IRenderer */
+	private $renderer = NULL;
+
 
 
 	function __construct(array $states, array $initials, array $finals)
@@ -204,7 +207,7 @@ class Automaton
 
 	function minimize()
 	{
-		// TODO...
+		// ...
 		return $this;
 	}
 
@@ -263,6 +266,30 @@ class Automaton
 	function generateStateName(array $list)
 	{
 		return '{' . implode(',', $list) . '}';
+	}
+
+
+
+	function setRenderer(IRenderer $renderer)
+	{
+		$this->renderer = $renderer;
+		return $this;
+	}
+
+
+
+	function getRenderer()
+	{
+		return $this->renderer === NULL ? ($this->renderer = new DefaultRenderer()) : $this->renderer;
+	}
+
+
+
+	function __toString()
+	{
+		ob_start();
+		$this->getRenderer()->render($this);
+		return ob_get_clean();
 	}
 }
 

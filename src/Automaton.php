@@ -149,7 +149,7 @@ class Automaton
 
 				ksort($ts);
 
-				!isset($queue[ $tsname = $this->generateStateName(array_keys($ts)) ]) && ($queue[$tsname] = $ts);
+				$queue[ $tsname = $this->generateStateName(array_keys($ts)) ] = $ts;
 				$final && $finals[$name] = TRUE;
 				$states[$name][$letter] = array($tsname => TRUE);
 			}
@@ -179,9 +179,7 @@ class Automaton
 				foreach ($this->states[$state] as $letter => $targets) {
 					if ($letter === '') {
 						foreach ($targets as $target => $foo) {
-							if (!isset($queue[$target])) {
-								$queue[$target] = TRUE;
-							}
+							$queue[$target] = TRUE;
 						}
 
 						continue;

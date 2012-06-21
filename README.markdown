@@ -112,3 +112,19 @@ $automaton->normalize();
 */
 
 ```
+
+But let's be honest - the PHP definition is not that handy, you have to write too much.
+
+Don't worry, you can specify the automaton in an external file.
+
+Let's see the upper automaton described in a file format:
+
+```
+
+     a  b  c   \eps
+><A  B  -  C|A  -
+  B   A  A  A|B  A
+ <C   C  C  C    -
+
+
+```

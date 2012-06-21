@@ -2,6 +2,8 @@
 
 namespace Automaton;
 
+require_once __DIR__ . '/renderers/DefaultRenderer.php';
+
 
 /**
  * States

@@ -2,6 +2,9 @@
 
 namespace Automaton;
 
+require_once __DIR__ . '/IRenderer.php';
+require_once __DIR__ . '/../Automaton.php';
+
 
 class DefaultRenderer implements IRenderer
 {

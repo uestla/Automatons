@@ -2,6 +2,9 @@
 
 namespace Automaton;
 
+require_once __DIR__ . '/IFactory.php';
+require_once __DIR__ . '/../Automaton.php';
+
 
 class FileFactory implements IFactory
 {

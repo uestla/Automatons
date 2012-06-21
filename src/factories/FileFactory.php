@@ -24,6 +24,7 @@ class FileFactory implements IFactory
 
 
 
+	/** @param  string */
 	function __construct($file)
 	{
 		$this->file = $file;

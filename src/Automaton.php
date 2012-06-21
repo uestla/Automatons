@@ -55,6 +55,11 @@ class Automaton
 
 
 
+	/**
+	 * @param  array
+	 * @param  array
+	 * @param  array
+	 */
 	function __construct(array $states, array $initials, array $finals)
 	{
 		if (!count($states) || !count($initials) || !count($finals)) {
@@ -127,6 +132,7 @@ class Automaton
 
 
 
+	/** @return Automaton provides fluent interface */
 	function determinize()
 	{
 		if (isset($this->alphabet[''])) {
@@ -172,6 +178,7 @@ class Automaton
 
 
 
+	/** @return Automaton provides fluent interface */
 	function removeEpsilon()
 	{
 		if (!isset($this->alphabet[''])) {
@@ -208,6 +215,7 @@ class Automaton
 
 
 
+	/** @return Automaton provides fluent interface */
 	function minimize()
 	{
 		$groups['II'] = $groups['I'] = $groups = array();
@@ -324,6 +332,7 @@ class Automaton
 
 
 
+	/** @return Automaton provides fluent interface */
 	function normalize()
 	{
 		$max = 0;

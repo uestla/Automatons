@@ -209,8 +209,116 @@ class Automaton
 
 	function minimize()
 	{
-		// ...
+		$groups['II'] = $groups['I'] = $groups = array();
+		foreach ($this->states as $state => $t) {
+			$group = isset($this->finals[$state]) ? 'II' : 'I';
+			$groups[ $group ][] = $state;
+			sort($groups[$group]);
+		}
+
+		while (TRUE) {
+			$max = 0;
+			$newg = array();
+			$matrix = $this->createStateGroupsMatrix($groups);
+
+			foreach ($matrix as $group => $states) {
+				asort($states);
+				$processed = array();
+
+				foreach ($states as $state => $targets) {
+					if (!isset($processed[$targets])) {
+						$newg[ $name = str_repeat('I', ++$max) ] = array();
+						$processed[$targets] = TRUE;
+					}
+
+					$newg[$name][] = $state;
+					sort($newg[$name]);
+				}
+			}
+
+			if ($groups === $newg) {
+				break;
+			}
+
+			$groups = $newg;
+		}
+
+		$stategroups = $this->createStateGroups($groups);
+		$states = $initials = $finals = array();
+		foreach ($this->states as $state => $transitions) {
+			if (isset($this->initials[$state])) {
+				$initials[$stategroups[$state]] = TRUE;
+			}
+
+			if (isset($this->finals[$state])) {
+				$finals[$stategroups[$state]] = TRUE;
+			}
+
+			$name = $stategroups[$state];
+			if (isset($states[$name])) {
+				continue;
+			}
+
+			$states[$name] = array();
+			foreach ($transitions as $letter => $targets) {
+				$states[$name][$letter] = array();
+				foreach ($targets as $target => $foo) {
+					$states[$name][$letter][$stategroups[$target]] = $foo;
+				}
+			}
+		}
+
+		ksort($states);
+		ksort($initials);
+		ksort($finals);
+
+		$this->states = $states;
+		$this->initials = $initials;
+		$this->finals = $finals;
+
 		return $this;
+	}
+
+
+
+	private function createStateGroupsMatrix(array $groups)
+	{
+		$matrix = array();
+		$stategroups = $this->createStateGroups($groups);
+
+		foreach ($groups as $group => $states) {
+			$matrix[$group] = array();
+			foreach ($states as $state) {
+				$matrix[$group][$state] = array();
+				foreach ($this->states[$state] as $letter => $targets) {
+					$matrix[$group][$state][$letter] = array();
+					if (count($targets) !== 1) {
+						throw new InvalidStateException("Automaton not determinized.");
+					}
+
+					list($target, ) = each($targets);
+					$matrix[$group][$state][$letter] = $stategroups[$target];
+				}
+
+				$matrix[$group][$state] = implode('|', $matrix[$group][$state]);
+			}
+		}
+
+		return $matrix;
+	}
+
+
+
+	private function createStateGroups(array $groups)
+	{
+		$stategroups = array();
+		foreach ($groups as $group => $states) {
+			foreach ($states as $state) {
+				$stategroups[$state] = $group;
+			}
+		}
+
+		return $stategroups;
 	}
 
 

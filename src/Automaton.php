@@ -272,6 +272,27 @@ class Automaton
 
 
 
+	function getStates()
+	{
+		return $this->states;
+	}
+
+
+
+	function isInitialState($state)
+	{
+		return isset($this->initials[$state]);
+	}
+
+
+
+	function isFinalState($state)
+	{
+		return isset($this->finals[$state]);
+	}
+
+
+
 	function setRenderer(IRenderer $renderer)
 	{
 		$this->renderer = $renderer;

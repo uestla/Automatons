@@ -116,6 +116,11 @@ $automaton->normalize();
 
 ```
 
+
+
+External file definition
+------------------------
+
 But let's be honest - the PHP definition is not that handy, you have to write too much.
 
 Don't worry, you can specify the automaton in an external file.
@@ -128,3 +133,29 @@ Let's see the upper automaton described in a file format:
   B   A  A  A|B  A
  <C   C  C  C    -
 ```
+
+Now we save this file as 'automaton.txt'. Now let's take a look at the PHP code needed
+for this automaton to create:
+
+```php
+
+<?php
+
+require_once __DIR__ . '/src/factories/FileFactory.php';
+
+$factory = new Automaton\FileFactory(__DIR__ . '/automaton.txt');
+$automaton = $factory->create()->determinize()->minimize()->normalize();
+echo $automaton;
+
+/* result (same as the one above):
+	      a  b  c
+	><1   2  3  4
+	  2   5  1  4
+	  3   3  3  3
+	 <4   4  4  4
+	 <5   5  1  4
+*/
+
+```
+
+Enjoy!

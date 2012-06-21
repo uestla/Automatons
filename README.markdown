@@ -136,7 +136,7 @@ Every next line specifies state and its transitions. The state name can be preff
 means final. Empty transition target is written as a `-` symbol and multiple targets are joined with `|`
 (no whitespace again!).
 
-Now we save this file as 'automaton.txt'. Now let's take a look at the PHP code needed
+Now we save this file as `automaton.txt`. Now let's take a look at the PHP code needed
 for this automaton to create:
 
 ```php

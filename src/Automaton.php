@@ -290,6 +290,10 @@ class Automaton
 
 
 
+	/**
+	 * @param  array
+	 * @return array
+	 */
 	private function createStateGroupsMatrix(array $groups)
 	{
 		$matrix = array();
@@ -318,6 +322,10 @@ class Automaton
 
 
 
+	/**
+	 * @param  array
+	 * @return array
+	 */
 	private function createStateGroups(array $groups)
 	{
 		$stategroups = array();
@@ -383,34 +391,38 @@ class Automaton
 
 
 
-	static function generateStateName(array $list)
-	{
-		return '{' . implode(',', $list) . '}';
-	}
-
-
-
+	/** @return array */
 	function getStates()
 	{
-		return $this->states;
+		$states = array();
+		foreach ($this->states as $state => $transitions) {
+			$states[$state] = array();
+			$states[$state]['initial'] = isset($this->initials[$state]);
+			$states[$state]['final'] = isset($this->finals[$state]);
+			$states[$state]['transitions'] = array();
+
+			foreach ($transitions as $letter => $targets) {
+				$states[$state]['transitions'][$letter] = array_keys($targets);
+			}
+		}
+
+		return $states;
 	}
 
 
 
-	function isInitialState($state)
+	/** @return array */
+	function getAlphabet()
 	{
-		return isset($this->initials[$state]);
+		return array_keys($this->alphabet);
 	}
 
 
 
-	function isFinalState($state)
-	{
-		return isset($this->finals[$state]);
-	}
-
-
-
+	/**
+	 * @param  IRenderer
+	 * @return Automaton provides fluent interface
+	 */
 	function setRenderer(IRenderer $renderer)
 	{
 		$this->renderer = $renderer;
@@ -419,17 +431,34 @@ class Automaton
 
 
 
+	/** @return IRenderer */
 	function getRenderer()
 	{
-		return $this->renderer === NULL ? ($this->renderer = new DefaultRenderer()) : $this->renderer;
+		if ($this->renderer === NULL) {
+			$this->renderer = new DefaultRenderer;
+		}
+
+		return $this->renderer;
 	}
 
 
 
+	/** @return string */
 	function __toString()
 	{
 		ob_start();
 		$this->getRenderer()->render($this);
 		return ob_get_clean();
+	}
+
+
+
+	/**
+	 * @param  array
+	 * @return string
+	 */
+	static function generateStateName(array $list)
+	{
+		return '{' . implode(',', $list) . '}';
 	}
 }

@@ -21,19 +21,19 @@ class DefaultRenderer implements IRenderer
 	{
 		$cell = 2;
 		$matrix = array();
+		$states = $a->getStates();
+		$alphabet = $a->getAlphabet();
 
-		foreach ($a->getStates() as $state => $transitions) {
-			$matrix[$state] = array();
+		foreach ($states as $state => $info) {
+			foreach ($info['transitions'] as $letter => $targets) {
+				unset($states[$state]['transitions'][$letter]);
 
-			foreach ($transitions as $letter => $targets) {
 				$letter === '' && ($letter = static::EPSILON);
-				$matrix[$state][$letter] = implode(static::STATE_SEPARATOR, array_keys($targets));
-				!strlen($matrix[$state][$letter]) && ($matrix[$state][$letter] = static::NO_TARGET);
-
-				$cell = max(strlen($letter), strlen($matrix[$state][$letter]), $cell);
+				$states[$state]['transitions'][$letter] = implode(static::STATE_SEPARATOR, $targets);
+				!strlen($states[$state]['transitions'][$letter]) && ($states[$state]['transitions'][$letter] = static::NO_TARGET);
 			}
 
-			!isset($alphabet) && ($alphabet = array_keys($matrix[$state]));
+			$cell = max(strlen($letter), strlen($states[$state]['transitions'][$letter]), $cell);
 		}
 
 		echo str_repeat(' ', $cell + 4);
@@ -45,12 +45,12 @@ class DefaultRenderer implements IRenderer
 
 		echo "\n";
 
-		foreach ($matrix as $state => $transitions) {
-			echo ($a->isInitialState($state) ? static::INITIAL_S : ' ')
-				. ($a->isFinalState($state) ? static::FINAL_S : ' ')
+		foreach ($states as $state => $info) {
+			echo ($info['initial'] ? static::INITIAL_S : ' ')
+				. ($info['final'] ? static::FINAL_S : ' ')
 				. $state . str_repeat(' ', $cell + 2 - strlen($state));
 
-			foreach ($transitions as $letter => $targets) {
+			foreach ($info['transitions'] as $letter => $targets) {
 				$w = ($cell - strlen($targets)) / 2;
 				echo str_repeat(' ', floor($w)) . $targets . str_repeat(' ', ceil($w));
 			}

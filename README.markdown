@@ -75,8 +75,6 @@ $automaton->removeEpsilon();
 	 <C         C      C      C
 */
 
-
-
 $automaton->determinize();
 /* result:
 	               a        b        c
@@ -90,8 +88,6 @@ $automaton->determinize();
 	  {}          {}       {}       {}
 */
 
-
-
 $automaton->minimize();
 /* result:
 	            a      b      c
@@ -101,8 +97,6 @@ $automaton->minimize();
 	 <IIII    IIII   IIII   IIII
 	><IIIII     I     II    IIII
 */
-
-
 
 $automaton->normalize();
 /* result:

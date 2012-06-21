@@ -135,11 +135,11 @@ Let's see the upper automaton described in a file format:
 ```
 
 Whole file has obviously a table-like structure. As you can see, the first line specifies the
-automaton alphabet. Epsilon character is written as '\eps'.
+automaton alphabet. Epsilon character is written as `\eps`.
 
-Every next line specifies state and its transitions. The state name can be preffixed with '>', '<' or both
-(no whitespace between the symbol and the state name!). The '>' symbol means the state is initial, the '<' one
-means final. Empty transition target is written as a '-' symbol and multiple targets are joined with '|'
+Every next line specifies state and its transitions. The state name can be preffixed with `>`, `<` or both
+(no whitespace between the symbol and the state name!). The `>` symbol means the state is initial, the `<` one
+means final. Empty transition target is written as a `-` symbol and multiple targets are joined with `|`
 (no whitespace again!).
 
 Now we save this file as 'automaton.txt'. Now let's take a look at the PHP code needed

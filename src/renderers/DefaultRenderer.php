@@ -25,12 +25,8 @@ class DefaultRenderer implements IRenderer
 
 		foreach ($states as $state => $info) {
 			foreach ($info['transitions'] as $letter => $targets) {
-				unset($states[$state]['transitions'][$letter]);
-
-				$letter === '' && ($letter = static::EPSILON);
 				$states[$state]['transitions'][$letter] = implode(static::STATE_SEPARATOR, $targets);
 				!strlen($states[$state]['transitions'][$letter]) && ($states[$state]['transitions'][$letter] = static::NO_TARGET);
-
 				$cell = max(strlen($letter), strlen($states[$state]['transitions'][$letter]), $cell);
 			}
 		}
@@ -40,6 +36,7 @@ class DefaultRenderer implements IRenderer
 		echo str_repeat(' ', $cell + 2);
 
 		foreach ($alphabet as $letter) {
+			$letter === '' && ($letter = static::EPSILON);
 			$w = ($cell - strlen($letter)) / 2;
 			echo str_repeat(' ', floor($w)) . $letter . str_repeat(' ', ceil($w));
 		}

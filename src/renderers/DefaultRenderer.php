@@ -19,7 +19,7 @@ class DefaultRenderer implements IRenderer
 	/** @param  Automaton */
 	function render(Automaton $a)
 	{
-		$cell = 0;
+		$cell = 2;
 		$matrix = array();
 
 		foreach ($a->getStates() as $state => $transitions) {
@@ -30,8 +30,7 @@ class DefaultRenderer implements IRenderer
 				$matrix[$state][$letter] = implode(static::STATE_SEPARATOR, array_keys($targets));
 				!strlen($matrix[$state][$letter]) && ($matrix[$state][$letter] = static::NO_TARGET);
 
-				$cell = max(strlen($letter), $cell);
-				$cell = max(strlen($matrix[$state][$letter]), $cell);
+				$cell = max(strlen($letter), strlen($matrix[$state][$letter]), $cell);
 			}
 
 			!isset($alphabet) && ($alphabet = array_keys($matrix[$state]));

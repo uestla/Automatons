@@ -20,7 +20,6 @@ class DefaultRenderer implements IRenderer
 	function render(Automaton $a)
 	{
 		$cell = 2;
-		$matrix = array();
 		$states = $a->getStates();
 		$alphabet = $a->getAlphabet();
 

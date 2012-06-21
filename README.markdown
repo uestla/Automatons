@@ -65,9 +65,7 @@ Now let's take a look at some operations:
 <?php
 
 $automaton->removeEpsilon();
-
-/*
-	result:
+/* result:
 	            a      b      c
 	><A         B      -     A|C
 	  B        A|B     A    A|B|C
@@ -77,9 +75,7 @@ $automaton->removeEpsilon();
 
 
 $automaton->determinize();
-
-/*
-	result:
+/* result:
 	               a        b        c
 	 <{A,B,C}   {A,B,C}   {A,C}   {A,B,C}
 	 <{A,B}      {A,B}     {A}    {A,B,C}
@@ -94,9 +90,7 @@ $automaton->determinize();
 
 
 $automaton->minimize();
-
-/*
-	result:
+/* result:
 	            a      b      c
 	  I        III   IIIII  IIII
 	  II       II     II     II
@@ -108,9 +102,7 @@ $automaton->minimize();
 
 
 $automaton->normalize();
-
-/*
-	result:
+/* result:
 	      a  b  c
 	><1   2  3  4
 	  2   5  1  4

@@ -19,7 +19,7 @@ class DefaultRenderer implements IRenderer
 	/** @param  Automaton */
 	function render(Automaton $a)
 	{
-		$cell = 2;
+		$cell = 0;
 		$states = $a->getStates();
 		$alphabet = $a->getAlphabet();
 
@@ -35,7 +35,9 @@ class DefaultRenderer implements IRenderer
 			$cell = max(strlen($letter), strlen($states[$state]['transitions'][$letter]), $cell);
 		}
 
-		echo str_repeat(' ', $cell + 4);
+		$cell += 2;
+
+		echo str_repeat(' ', $cell + 2);
 
 		foreach ($alphabet as $letter) {
 			$w = ($cell - strlen($letter)) / 2;
@@ -47,7 +49,7 @@ class DefaultRenderer implements IRenderer
 		foreach ($states as $state => $info) {
 			echo ($info['initial'] ? static::INITIAL_S : ' ')
 				. ($info['final'] ? static::FINAL_S : ' ')
-				. $state . str_repeat(' ', $cell + 2 - strlen($state));
+				. $state . str_repeat(' ', $cell - strlen($state));
 
 			foreach ($info['transitions'] as $letter => $targets) {
 				$w = ($cell - strlen($targets)) / 2;

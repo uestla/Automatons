@@ -30,9 +30,9 @@ class DefaultRenderer implements IRenderer
 				$letter === '' && ($letter = static::EPSILON);
 				$states[$state]['transitions'][$letter] = implode(static::STATE_SEPARATOR, $targets);
 				!strlen($states[$state]['transitions'][$letter]) && ($states[$state]['transitions'][$letter] = static::NO_TARGET);
-			}
 
-			$cell = max(strlen($letter), strlen($states[$state]['transitions'][$letter]), $cell);
+				$cell = max(strlen($letter), strlen($states[$state]['transitions'][$letter]), $cell);
+			}
 		}
 
 		$cell += 2;

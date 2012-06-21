@@ -50,12 +50,10 @@ echo $automaton;
 Great. We've created our first automaton. Upper code will print following:
 
 ```
-
        \eps   a    b    c
 ><A      -    B    -   A|C
   B      A    A    A   A|B
  <C      -    C    C    C
-
 ```
 
 Now let's take a look at some operations:
@@ -120,11 +118,8 @@ Don't worry, you can specify the automaton in an external file.
 Let's see the upper automaton described in a file format:
 
 ```
-
      a  b  c   \eps
 ><A  B  -  C|A  -
   B   A  A  A|B  A
  <C   C  C  C    -
-
-
 ```

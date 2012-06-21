@@ -8,8 +8,7 @@ any valid automaton you give as the input.
 
 
 
-Automaton definition
-********************
+======== Automaton definition
 
 Let's take a look at some simple example:
 

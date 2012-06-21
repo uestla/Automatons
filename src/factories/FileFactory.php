@@ -4,6 +4,7 @@ namespace Automaton;
 
 require_once __DIR__ . '/IFactory.php';
 require_once __DIR__ . '/../Automaton.php';
+require_once __DIR__ . '/../exceptions/exceptions.php';
 
 
 class FileFactory implements IFactory
@@ -141,9 +142,3 @@ class FileFactory implements IFactory
 		$states = explode(static::STATE_SEPARATOR, $input);
 	}
 }
-
-
-
-class WrongFormatException extends \Exception {}
-class InvalidInputException extends \Exception {}
-class FileNotFoundException extends \Exception {}

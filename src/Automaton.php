@@ -3,6 +3,7 @@
 namespace Automaton;
 
 require_once __DIR__ . '/renderers/DefaultRenderer.php';
+require_once __DIR__ . '/exceptions/exceptions.php';
 
 
 /**
@@ -423,7 +424,3 @@ class Automaton
 		return ob_get_clean();
 	}
 }
-
-
-
-class InvalidStateException extends \Exception {}

@@ -141,7 +141,7 @@ class Automaton
 
 		$states = $initials = $finals = $queue = array();
 
-		$initials[ $initname = $this->generateStateName(array_keys($this->initials)) ] = TRUE;
+		$initials[ $initname = static::generateStateName(array_keys($this->initials)) ] = TRUE;
 		$queue[ $initname ] = $this->initials;
 
 		while (list($name, $ss) = each($queue)) {
@@ -161,7 +161,7 @@ class Automaton
 
 				ksort($ts);
 
-				$queue[ $tsname = $this->generateStateName(array_keys($ts)) ] = $ts;
+				$queue[ $tsname = static::generateStateName(array_keys($ts)) ] = $ts;
 				$final && $finals[$name] = TRUE;
 				$states[$name][$letter] = array($tsname => TRUE);
 			}
@@ -383,7 +383,7 @@ class Automaton
 
 
 
-	function generateStateName(array $list)
+	static function generateStateName(array $list)
 	{
 		return '{' . implode(',', $list) . '}';
 	}

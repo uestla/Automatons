@@ -443,6 +443,14 @@ class Automaton
 
 
 
+	/** @return void */
+	function render()
+	{
+		echo $this;
+	}
+
+
+
 	/** @return string */
 	function __toString()
 	{

@@ -124,8 +124,8 @@ Let's see the upper automaton described in a file format:
 ```
      a  b  c   \eps
 ><A  B  -  C|A  -
-  B   A  A  A|B  A
- <C   C  C  C    -
+  B  A  A  A|B  A
+ <C  C  C  C    -
 ```
 
 Whole file has obviously a table-like structure. As you can see, the first line specifies the

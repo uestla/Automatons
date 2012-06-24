@@ -446,7 +446,7 @@ class Automaton
 	/** @return void */
 	function render()
 	{
-		echo $this;
+		$this->getRenderer()->render($this);
 	}
 
 
@@ -455,7 +455,7 @@ class Automaton
 	function __toString()
 	{
 		ob_start();
-		$this->getRenderer()->render($this);
+		$this->render();
 		return ob_get_clean();
 	}
 

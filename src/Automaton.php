@@ -443,10 +443,11 @@ class Automaton
 
 
 
-	/** @return void */
+	/** @return Automaton provides fluent interface */
 	function render()
 	{
 		$this->getRenderer()->render($this);
+		return $this;
 	}
 
 

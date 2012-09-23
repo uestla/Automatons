@@ -25,19 +25,19 @@ $states = array(
 		'a' => array('B'), // this means that we can go from state A to state B on letter 'a'
 		'b' => array(), // we can't go anywhere from state A on letter 'b'
 		'c' => array('C', 'A'), // multiple transitions are also supported
-		'' => array(), // '' means epsilon
+		''  => array(), // '' means epsilon
 	),
 	'B' => array(
 		'a' => array('A'),
 		'b' => array('A'),
 		'c' => array('A', 'B'),
-		'' => array('A'),
+		''  => array('A'),
 	),
 	'C' => array(
 		'a' => array('C'),
 		'b' => array('C'),
 		'c' => array('C'),
-		'' => array(),
+		''  => array(),
 	),
 );
 

@@ -44,9 +44,8 @@ class DefaultRenderer implements IRenderer
 		echo "\n";
 
 		foreach ($states as $state => $info) {
-			echo ($info['initial'] ? static::INITIAL_S : ' ')
-				. ($info['final'] ? static::FINAL_S : ' ')
-				. $state . str_repeat(' ', $cell - strlen($state));
+			echo str_pad( ($info['initial'] ? static::INITIAL_S : '') . ($info['final'] ? static::FINAL_S : ''), strlen($state) + 2, ' ', STR_PAD_LEFT )
+					. $state . str_repeat(' ', $cell - strlen($state));
 
 			foreach ($info['transitions'] as $letter => $targets) {
 				$w = ($cell - strlen($targets)) / 2;

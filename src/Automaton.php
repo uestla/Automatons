@@ -185,10 +185,14 @@ class Automaton
 			throw new InvalidStateException("Epsilon not found in the alphabet.");
 		}
 
-		foreach ($this->states as & $transitions) {
+		foreach ($this->states as $name => & $transitions) {
 			$queue = $transitions[''];
 
 			while (list($state, ) = each($queue)) {
+				if (isset($this->finals[$state])) {
+					$this->finals[$name] = TRUE;
+				}
+
 				foreach ($this->states[$state] as $letter => $targets) {
 					if ($letter === '') {
 						foreach ($targets as $target => $foo) {

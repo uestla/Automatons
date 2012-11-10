@@ -10,7 +10,7 @@ require_once __DIR__ . '/../exceptions/exceptions.php';
 class FileFactory implements IFactory
 {
 	/** @var string */
-	private $file;
+	protected $file;
 
 
 
@@ -127,7 +127,7 @@ class FileFactory implements IFactory
 	 * @param  bool
 	 * @return void
 	 */
-	private function parseStateName($input, array & $states, & $init, & $final)
+	protected function parseStateName($input, array & $states, & $init, & $final)
 	{
 		$i = preg_quote(static::INITIAL_S, '#');
 		$f = preg_quote(static::FINAL_S, '#');

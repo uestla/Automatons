@@ -39,19 +39,19 @@ require_once __DIR__ . '/exceptions/exceptions.php';
 class Automaton
 {
 	/** @var array */
-	private $states = NULL;
+	protected $states = NULL;
 
 	/** @var array */
-	private $initials = NULL;
+	protected $initials = NULL;
 
 	/** @var array */
-	private $finals = NULL;
+	protected $finals = NULL;
 
 	/** @var array */
-	private $alphabet = NULL;
+	protected $alphabet = NULL;
 
 	/** @var IRenderer */
-	private $renderer = NULL;
+	protected $renderer = NULL;
 
 
 
@@ -298,7 +298,7 @@ class Automaton
 	 * @param  array
 	 * @return array
 	 */
-	private function createStateGroupsMatrix(array $groups)
+	protected function createStateGroupsMatrix(array $groups)
 	{
 		$matrix = array();
 		$stategroups = $this->createStateGroups($groups);
@@ -330,7 +330,7 @@ class Automaton
 	 * @param  array
 	 * @return array
 	 */
-	private function createStateGroups(array $groups)
+	protected function createStateGroups(array $groups)
 	{
 		$stategroups = array();
 		foreach ($groups as $group => $states) {

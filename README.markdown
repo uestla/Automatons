@@ -136,7 +136,7 @@ Every next line specifies state and its transitions. The state name can be preff
 means final. Empty transition target is written as a `-` symbol and multiple targets are joined with `|`
 (no whitespace again!).
 
-The state name can be however long and can contain any characters except whitespace and the reserverd pipe character (`|`).
+The state name can be however long and can contain any characters except whitespace and the reserverd characters (`|`, `<` and `>`).
 
 Now we save this file as `automaton.txt`. Now let's take a look at the PHP code needed
 for this automaton to create:
@@ -147,8 +147,8 @@ for this automaton to create:
 
 require_once __DIR__ . '/src/factories/FileFactory.php';
 
-$factory = new Automaton\FileFactory(__DIR__ . '/automaton.txt');
-$automaton = $factory->create(); // scans the file and creates the automaton instance
+$factory = new Automaton\FileFactory;
+$automaton = $factory->create( __DIR__ . '/automaton.txt' ); // scans the file and creates the automaton instance
 $automaton->determinize()->minimize()->normalize();
 echo $automaton;
 

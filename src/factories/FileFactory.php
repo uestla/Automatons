@@ -9,11 +9,6 @@ require_once __DIR__ . '/../exceptions/exceptions.php';
 
 class FileFactory implements IFactory
 {
-	/** @var string */
-	protected $file;
-
-
-
 	const EPSILON = '\\eps';
 	const EMPTY_TARGET = '-';
 	const NFA = 'NFA';
@@ -24,20 +19,19 @@ class FileFactory implements IFactory
 
 
 
-	/** @param  string */
-	function __construct($file)
+	/**
+	 * @param  string
+	 * @return Automaton
+	 */
+	function create($file = NULL)
 	{
-		$this->file = $file;
-	}
+		if ($file === NULL) {
+			throw new InvalidArgumentException("File not set.");
+		}
 
-
-
-	/** @return Automaton */
-	function create()
-	{
-		$path = realpath($this->file);
-		if ($path === FALSE) {
-			throw new FileNotFoundException("File '{$this->file}' not found.");
+		$path = realpath($file);
+		if ($path === FALSE || !is_file($path)) {
+			throw new FileNotFoundException("File '{$file}' not found.");
 		}
 
 		$states = $initials = $finals = $alphabet = array();
@@ -79,7 +73,7 @@ class FileFactory implements IFactory
 			}
 
 			$ss = array();
-			$this->parseStateName($state, $ss, $init, $final);
+			static::parseStateName($state, $ss, $init, $final);
 
 			foreach ($ss as $state) {
 				if (!strlen($state)) {
@@ -127,7 +121,7 @@ class FileFactory implements IFactory
 	 * @param  bool
 	 * @return void
 	 */
-	protected function parseStateName($input, array & $states, & $init, & $final)
+	protected static function parseStateName($input, array & $states, & $init, & $final)
 	{
 		$i = preg_quote(static::INITIAL_S, '#');
 		$f = preg_quote(static::FINAL_S, '#');

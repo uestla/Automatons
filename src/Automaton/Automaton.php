@@ -229,7 +229,7 @@ class Automaton
 	/** @return void */
 	protected function discoverDeterminism()
 	{
-		if (isset($this->alphabet[static::EPSILON])) {
+		if (isset($this->alphabet[static::EPSILON]) || count($this->initials) > 1) {
 			$this->isDeterministic = FALSE;
 			return ;
 		}

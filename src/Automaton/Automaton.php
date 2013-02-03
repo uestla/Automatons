@@ -32,6 +32,9 @@ class Automaton
 	/** @var array */
 	protected $finals = NULL;
 
+	/** @var bool */
+	protected $hasEpsilon;
+
 
 
 	/** @var bool */
@@ -92,17 +95,21 @@ class Automaton
 		foreach ($states as $state => $transitions) {
 			if ($this->alphabet === NULL) {
 				$this->alphabet = Helpers::valuesToKeys(array_keys($transitions));
-				if (!count($this->alphabet) || $this->alphabet === array(static::EPSILON => TRUE)) {
-					throw new InvalidAlphabetException("Alphabet is empty or contains epsilon symbol only.");
+				unset($this->alphabet[static::EPSILON]);
+
+				if (!count($this->alphabet)) {
+					throw new InvalidAlphabetException("At least one symbol is required to be in alphabet.");
 				}
 
-			} elseif (count($transitions) !== count($this->alphabet)) {
+				$this->hasEpsilon = isset($transitions[static::EPSILON]);
+
+			} elseif (count($transitions) !== count($this->alphabet) + ($this->hasEpsilon ? 1 : 0)) {
 				throw new InvalidTargetCount("Invalid target count - " . count($this->alphabet) . " expected, " . count($transitions) . " given.");
 			}
 
 			$this->transitions[(string) $state] = array();
 			foreach ($transitions as $symbol => $targets) {
-				if (!isset($this->alphabet[$symbol])) {
+				if ($symbol !== static::EPSILON && !isset($this->alphabet[$symbol])) {
 					throw new SymbolNotFoundException("Symbol '$symbol' not found in alphabet.");
 				}
 
@@ -127,7 +134,7 @@ class Automaton
 	/** @return Automaton */
 	function removeEpsilon()
 	{
-		if (!isset($this->alphabet[static::EPSILON])) {
+		if (!$this->hasEpsilon) {
 			return $this;
 		}
 
@@ -135,13 +142,9 @@ class Automaton
 		foreach ($this->states as $state => $foo) {
 			$delta[$state] = array();
 			$eps = $this->epsilonClosure($state);
+			unset($this->transitions[$state][static::EPSILON]);
 
 			foreach ($this->alphabet as $symbol => $foo) {
-				if ($symbol === static::EPSILON) {
-					unset($this->transitions[$state][$symbol]);
-					continue;
-				}
-
 				$delta[$state][$symbol] = array();
 				foreach ($eps as $s) {
 					if (isset($this->finals[$s])) {
@@ -155,7 +158,7 @@ class Automaton
 			}
 		}
 
-		unset($this->alphabet[static::EPSILON]);
+		$this->hasEpsilon = FALSE;
 		$this->transitions = $delta;
 		$this->discoverDeterminism();
 
@@ -175,7 +178,7 @@ class Automaton
 		}
 
 		$queue = array($state => TRUE);
-		if (isset($this->alphabet[static::EPSILON])) {
+		if ($this->hasEpsilon) {
 			while (list($s, ) = each($queue)) {
 				foreach ($this->transitions[$s][static::EPSILON] as $target) {
 					$queue[$target] = TRUE;
@@ -239,7 +242,7 @@ class Automaton
 	/** @return void */
 	protected function discoverDeterminism()
 	{
-		if (isset($this->alphabet[static::EPSILON]) || count($this->initials) > 1) {
+		if ($this->hasEpsilon || count($this->initials) > 1) {
 			$this->isDeterministic = FALSE;
 			return ;
 		}
@@ -406,6 +409,14 @@ class Automaton
 	function getAlphabet()
 	{
 		return array_keys($this->alphabet);
+	}
+
+
+
+	/** @return bool */
+	function hasEpsilon()
+	{
+		return $this->hasEpsilon;
 	}
 
 

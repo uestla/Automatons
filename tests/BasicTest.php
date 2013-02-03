@@ -55,6 +55,17 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		try {
 			new Automaton\Automaton(array(
+				'0' => array('' => '0'),
+
+			), '0', array());
+
+			$this->fail();
+
+		} catch (Automaton\InvalidAlphabetException $e) {}
+
+
+		try {
+			new Automaton\Automaton(array(
 				'0' => array(
 					'a' => '1',
 				),
@@ -123,6 +134,18 @@ class BasicTest extends PHPUnit_Framework_TestCase
 			$this->fail();
 
 		} catch (Automaton\StateNotFoundException $e) {}
+	}
+
+
+
+	function testGetters()
+	{
+		$a = $this->createTestingAutomaton();
+
+		$this->assertEquals(array('a', 'b'), $a->getAlphabet());
+		$this->assertEquals(array('0', '1', '2', '3', '4', '5', '6'), $a->getStates());
+		$this->assertEquals(array('0'), $a->getInitials());
+		$this->assertEquals(array('3', '6'), $a->getFinals());
 	}
 
 

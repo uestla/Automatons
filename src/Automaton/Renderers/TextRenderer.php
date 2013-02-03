@@ -35,7 +35,7 @@ class TextRenderer implements IRenderer
 		$widths['states'] = static::getItemMaxLen($a->getStates()) + 5;
 		$widths['alphabet'] = array();
 
-		foreach ($a->getAlphabet() as $symbol) {
+		foreach (static::getSymbols($a) as $symbol) {
 			$out = static::getOutSymbol($symbol);
 			$names = array($out); // symbol may be longer than the longest state name
 			foreach ($a->getTransitions() as $transitions) {
@@ -48,19 +48,19 @@ class TextRenderer implements IRenderer
 
 		// === HEADER ======================
 		echo '+', str_repeat('-', $widths['states']), '+';
-		foreach ($a->getAlphabet() as $symbol) {
+		foreach (static::getSymbols($a) as $symbol) {
 			echo str_repeat('-', $widths['alphabet'][$symbol]), '+';
 		}
 
 		echo "\n|", str_repeat(' ', $widths['states']), '|';
-		foreach ($a->getAlphabet() as $symbol) {
+		foreach (static::getSymbols($a) as $symbol) {
 			$out = static::getOutSymbol($symbol);
 			$padding = static::getPadding($widths['alphabet'][$symbol], $out);
 			echo str_repeat(' ', ceil($padding)), $out, str_repeat(' ', floor($padding)), '|';
 		}
 
 		echo "\n+", str_repeat('=', $widths['states']), '+';
-		foreach ($a->getAlphabet() as $symbol) {
+		foreach (static::getSymbols($a) as $symbol) {
 			echo str_repeat('=', $widths['alphabet'][$symbol]), '+';
 		}
 
@@ -88,7 +88,7 @@ class TextRenderer implements IRenderer
 
 		// === FOOTER ======================
 		echo "\n+", str_repeat('-', $widths['states']), '+';
-		foreach ($a->getAlphabet() as $symbol) {
+		foreach (static::getSymbols($a) as $symbol) {
 			echo str_repeat('-', $widths['alphabet'][$symbol]), '+';
 		}
 
@@ -147,5 +147,18 @@ class TextRenderer implements IRenderer
 	protected static function getPadding($width, $s)
 	{
 		return ($width - strlen($s)) / 2;
+	}
+
+
+
+	/**
+	 * @param  Automaton
+	 * @return array
+	 */
+	protected static function getSymbols(Automaton $a)
+	{
+		$symbols = $a->getAlphabet();
+		$a->hasEpsilon() && ($symbols[] = Automaton::EPSILON);
+		return $symbols;
 	}
 }

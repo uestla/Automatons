@@ -319,15 +319,11 @@ class Automaton
 		}
 
 		$this->states = Helpers::valuesToKeys($groupMap);
+
 		$initials = $finals = array();
 		foreach ($groupMap as $state => $group) {
-			if (isset($this->initials[$state])) {
-				$initials[$group] = TRUE;
-			}
-
-			if (isset($this->finals[$state])) {
-				$finals[$group] = TRUE;
-			}
+			isset($this->initials[$state]) && ($initials[$group] = TRUE);
+			isset($this->finals[$state]) && ($finals[$group] = TRUE);
 		}
 
 		$this->initials = $initials;
@@ -388,7 +384,6 @@ class Automaton
 
 		$this->transitions = $delta;
 
-		// TODO: same approach in determinization
 		$initials = $finals = array();
 		foreach (array('initials', 'finals') as $set) {
 			foreach ($this->$set as $state => $foo) {

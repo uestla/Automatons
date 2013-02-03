@@ -60,40 +60,40 @@ class EqualityTest extends PHPUnit_Framework_TestCase
 	static function createSecondAutomaton()
 	{
 		return new Automaton\Automaton(array(
-			'1' => array(
-				'a' => '2',
-				'b' => '5',
+			'I' => array(
+				'a' => 'II',
+				'b' => 'V',
 			),
-			'2' => array(
-				'a' => '5',
-				'b' => '3',
+			'II' => array(
+				'a' => 'V',
+				'b' => 'III',
 			),
-			'3' => array(
-				'a' => '4',
-				'b' => '7',
+			'III' => array(
+				'a' => 'IV',
+				'b' => 'VII',
 			),
-			'4' => array(
-				'a' => '4',
-				'b' => '4',
+			'IV' => array(
+				'a' => 'IV',
+				'b' => 'IV',
 			),
-			'5' => array(
-				'a' => '6',
-				'b' => '3',
+			'V' => array(
+				'a' => 'VI',
+				'b' => 'III',
 			),
-			'6' => array(
-				'a' => '7',
-				'b' => '3',
+			'VI' => array(
+				'a' => 'VII',
+				'b' => 'III',
 			),
-			'7' => array(
-				'a' => '7',
-				'b' => '8',
+			'VII' => array(
+				'a' => 'VII',
+				'b' => 'VIII',
 			),
-			'8' => array(
-				'a' => '8',
-				'b' => '8',
+			'VIII' => array(
+				'a' => 'VIII',
+				'b' => 'VIII',
 			),
 
-		), array('1'), array('5', '8'));
+		), array('I'), array('V', 'VIII'));
 	}
 
 }

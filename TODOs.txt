@@ -1,7 +1,6 @@
 TODO list
 ---------
 
-- normalization
 - factories:
 	- file factory, string factory...
 - checkInput()

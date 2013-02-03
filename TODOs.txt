@@ -1,7 +1,6 @@
 TODO list
 ---------
 
-- split tests into classes
 - normalization
 - factories:
 	- file factory, string factory...

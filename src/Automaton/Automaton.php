@@ -78,6 +78,10 @@ class Automaton
 		}
 
 		$initials = (array) $initials;
+		if (!count($initials)) {
+			throw new InvalidInitialsSetException("Initial state set cannot be empty.");
+		}
+
 		if (!Helpers::isSubsetOf($initials, $names)) {
 			throw new StateNotFoundException("Initial state set is not a subset of state set.");
 		}

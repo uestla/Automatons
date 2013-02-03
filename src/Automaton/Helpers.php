@@ -38,7 +38,6 @@ abstract class Helpers
 
 
 
-
 	/**
 	 * Turns array('one', 'two') into array('one' => TRUE, 'two' => TRUE)
 	 * for faster item existence testing (just type isset($array['one'])

@@ -33,7 +33,7 @@ class TextRenderer implements IRenderer
 		// === COLUMN WIDTHS ======================
 		$widths = array();
 		$widths['states'] = static::getItemMaxLen($a->getStates()) + 5;
-		$widths['alphabet'] = array();
+		$widths['symbols'] = array();
 
 		foreach (static::getSymbols($a) as $symbol) {
 			$out = static::getOutSymbol($symbol);
@@ -42,26 +42,26 @@ class TextRenderer implements IRenderer
 				$names[] = static::statesToString($a, $transitions[$symbol]);
 			}
 
-			$widths['alphabet'][$symbol] = static::getItemMaxLen($names) + 2;
+			$widths['symbols'][$symbol] = static::getItemMaxLen($names) + 2;
 		}
 
 
 		// === HEADER ======================
 		echo '+', str_repeat('-', $widths['states']), '+';
 		foreach (static::getSymbols($a) as $symbol) {
-			echo str_repeat('-', $widths['alphabet'][$symbol]), '+';
+			echo str_repeat('-', $widths['symbols'][$symbol]), '+';
 		}
 
 		echo "\n|", str_repeat(' ', $widths['states']), '|';
 		foreach (static::getSymbols($a) as $symbol) {
 			$out = static::getOutSymbol($symbol);
-			$padding = static::getPadding($widths['alphabet'][$symbol], $out);
+			$padding = static::getPadding($widths['symbols'][$symbol], $out);
 			echo str_repeat(' ', ceil($padding)), $out, str_repeat(' ', floor($padding)), '|';
 		}
 
 		echo "\n+", str_repeat('=', $widths['states']), '+';
 		foreach (static::getSymbols($a) as $symbol) {
-			echo str_repeat('=', $widths['alphabet'][$symbol]), '+';
+			echo str_repeat('=', $widths['symbols'][$symbol]), '+';
 		}
 
 
@@ -80,7 +80,7 @@ class TextRenderer implements IRenderer
 
 			foreach ($transitions as $symbol => $targets) {
 				$out = static::statesToString($a, $targets);
-				$padding = static::getPadding($widths['alphabet'][$symbol], $out);
+				$padding = static::getPadding($widths['symbols'][$symbol], $out);
 				echo str_repeat(' ', ceil($padding)), $out, str_repeat(' ', floor($padding)), '|';
 			}
 		}
@@ -89,7 +89,7 @@ class TextRenderer implements IRenderer
 		// === FOOTER ======================
 		echo "\n+", str_repeat('-', $widths['states']), '+';
 		foreach (static::getSymbols($a) as $symbol) {
-			echo str_repeat('-', $widths['alphabet'][$symbol]), '+';
+			echo str_repeat('-', $widths['symbols'][$symbol]), '+';
 		}
 
 		echo "\n";

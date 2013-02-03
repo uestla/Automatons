@@ -341,6 +341,24 @@ class Automaton
 
 
 
+	// === OPERATIONS ======================================================
+
+	/** @return Automaton */
+	function getComplement()
+	{
+		$a = clone $this;
+		$a->determinize();
+
+		$finals = array();
+		foreach ($a->getStates() as $state) {
+			!$a->isFinalState($state) && ($finals[] = $state);
+		}
+
+		return new Automaton($a->getTransitions(), $a->getInitials(), $finals);
+	}
+
+
+
 	// === GETTERS ======================================================
 
 	/** @return array */

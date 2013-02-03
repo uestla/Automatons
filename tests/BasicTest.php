@@ -144,9 +144,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testEpsilonRemoving()
 	{
-		$a = $this->createTestingAutomaton();
-		$a->removeEpsilon();
-
+		$a = $this->createTestingAutomaton()->removeEpsilon();
 
 		$this->assertEquals(array(
 			'0' => array(
@@ -206,8 +204,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testDeterminization()
 	{
-		$a = $this->createTestingAutomaton();
-		$a->determinize();
+		$a = $this->createTestingAutomaton()->determinize();
 
 		$this->assertEquals(array(
 			'[0]' => array(
@@ -266,10 +263,9 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testMinimization()
 	{
-		$a = $this->createTestingAutomaton();
-		$a->minimize();
+		$a = $this->createTestingAutomaton()->minimize();
 
-		$this->assertEquals(array(
+		$this->assertEquals(new Automaton\Automaton(array(
 			'I' => array(
 				'a' => array('II'),
 				'b' => array('III'),
@@ -287,11 +283,33 @@ class BasicTest extends PHPUnit_Framework_TestCase
 				'b' => array('IIII'),
 			),
 
-		), $a->getTransitions());
+		), array('I'), array('IIII')), $a);
+	}
 
 
-		$this->assertEquals(array('I'), $a->getInitials());
-		$this->assertEquals(array('IIII'), $a->getFinals());
+
+	function testComplement()
+	{
+		$a = $this->createTestingAutomaton()->minimize()->getComplement();
+		$this->assertEquals(new Automaton\Automaton(array(
+			'I' => array(
+				'a' => array('II'),
+				'b' => array('III'),
+			),
+			'II' => array(
+				'a' => array('IIII'),
+				'b' => array('IIII'),
+			),
+			'III' => array(
+				'a' => array('IIII'),
+				'b' => array('III'),
+			),
+			'IIII' => array(
+				'a' => array('IIII'),
+				'b' => array('IIII'),
+			),
+
+		), array('I'), array('I', 'II', 'III')), $a);
 	}
 
 

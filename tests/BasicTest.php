@@ -320,7 +320,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 	{
 		$a = $this->createBigAutomaton()->minimize();
 
-		$this->assertEquals(new Automaton\Automaton(array(
+		$expected = new Automaton\Automaton(array(
 			'1' => array(
 				'a' => array('2'),
 				'b' => array('3'),
@@ -338,7 +338,10 @@ class BasicTest extends PHPUnit_Framework_TestCase
 				'b' => array('4'),
 			),
 
-		), array('1'), array('4')), $a);
+		), array('1'), array('4'));
+
+		$this->assertEquals($expected, $a);
+		$this->assertEquals($expected, $a->minimize());
 	}
 
 

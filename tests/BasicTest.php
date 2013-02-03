@@ -346,6 +346,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 	function testComplement()
 	{
 		$a = $this->createBigAutomaton()->minimize()->getComplement();
+
 		$this->assertEquals(new Automaton\Automaton(array(
 			'1' => array(
 				'a' => array('2'),

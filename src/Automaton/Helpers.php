@@ -14,7 +14,7 @@ namespace Automaton;
 
 
 /**
- * Helpers for simple arrays and string operations.
+ * Static helpers for some basic operations.
  *
  * @author Petr Kessler
  */

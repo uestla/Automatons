@@ -32,8 +32,14 @@ abstract class Helpers
 		// prevent automatons change
 		$a = clone $a;
 		$b = clone $b;
+		$a->normalize();
+		$b->normalize();
 
-		return $a->normalize() == $b->normalize(); // intentionally ==
+		return $a->getStates() === $b->getStates()
+				&& $a->getAlphabet() === $b->getAlphabet()
+				&& $a->getInitials() === $b->getInitials()
+				&& $a->getFinals() === $b->getFinals()
+				&& $a->getTransitions() === $b->getTransitions();
 	}
 
 

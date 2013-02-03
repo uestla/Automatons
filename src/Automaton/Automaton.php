@@ -252,31 +252,6 @@ class Automaton
 
 
 
-	/** @return bool */
-	protected function discoverDeterminism()
-	{
-		if ($this->hasEpsilon || count($this->initials) > 1) {
-			return FALSE;
-		}
-
-		$reachable = array();
-		foreach ($this->transitions as $state => $transitions) {
-			isset($this->initials[$state]) && $reachable[$state] = TRUE;
-
-			foreach ($transitions as $targets) {
-				if (count($targets) !== 1) {
-					return FALSE;
-				}
-
-				$reachable[reset($targets)] = TRUE;
-			}
-		}
-
-		return count($reachable) === count($this->states);
-	}
-
-
-
 	/** @return Automaton */
 	function minimize()
 	{
@@ -529,6 +504,31 @@ class Automaton
 		}
 
 		return $this->isDeterministic;
+	}
+
+
+
+	/** @return bool */
+	protected function discoverDeterminism()
+	{
+		if ($this->hasEpsilon || count($this->initials) > 1) {
+			return FALSE;
+		}
+
+		$reachable = array();
+		foreach ($this->transitions as $state => $transitions) {
+			isset($this->initials[$state]) && $reachable[$state] = TRUE;
+
+			foreach ($transitions as $targets) {
+				if (count($targets) !== 1) {
+					return FALSE;
+				}
+
+				$reachable[reset($targets)] = TRUE;
+			}
+		}
+
+		return count($reachable) === count($this->states);
 	}
 
 

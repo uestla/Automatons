@@ -348,13 +348,7 @@ class Automaton
 	{
 		$a = clone $this;
 		$a->determinize();
-
-		$finals = array();
-		foreach ($a->getStates() as $state) {
-			!$a->isFinalState($state) && ($finals[] = $state);
-		}
-
-		return new Automaton($a->getTransitions(), $a->getInitials(), $finals);
+		return new Automaton($a->getTransitions(), $a->getInitials(), array_diff($a->getStates(), $a->getFinals()));
 	}
 
 

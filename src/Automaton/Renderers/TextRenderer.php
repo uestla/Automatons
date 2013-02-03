@@ -146,10 +146,6 @@ class TextRenderer implements IRenderer
 	 */
 	protected static function getPadding($width, $s)
 	{
-		if (strlen($s) > $width) {
-			throw new \InvalidArgumentException("String '$s' is longer than column width ($width).");
-		}
-
 		return ($width - strlen($s)) / 2;
 	}
 }

@@ -1,4 +1,0 @@
-NFA  a  b  c   \eps
-><A  B  -  C|A  -
-  B  A  A  A|B  A
- <C  C  C  C    -

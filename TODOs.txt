@@ -1,0 +1,12 @@
+TODO list
+---------
+
+- normalization
+- factories:
+	- file factory, string factory...
+- checkInput()
+	- optimization when empty finals set
+	- reading the input string and checking all available symbols:
+		- for example string 'abc' will be read in 2 ways with alphabet ['a', 'b', 'bc']
+- automaton operations: union, intersection, complement, product, iteration
+	- when multiple methods, make the method choice available as an optional method argument (constant)

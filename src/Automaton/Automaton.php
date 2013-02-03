@@ -282,6 +282,7 @@ class Automaton
 	{
 		$this->determinize();
 
+		// split states into final and non-final group
 		$transGroups['2'] = $transGroups['1'] = $transGroups = array();
 		foreach ($this->states as $state => $foo) {
 			$group = isset($this->finals[$state]) ? '2' : '1';
@@ -326,7 +327,7 @@ class Automaton
 				}
 			}
 
-			if ($newTrans === $transGroups) {
+			if ($newTrans === $transGroups) { // no more splitting done
 				break;
 			}
 

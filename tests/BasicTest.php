@@ -178,40 +178,39 @@ class BasicTest extends PHPUnit_Framework_TestCase
 	{
 		$a = $this->createFirstAutomaton()->removeEpsilon();
 
-		$this->assertEquals(array(
+		$expected = new Automaton\Automaton(array(
 			'0' => array(
 				'a' => array('0', '1'),
 				'b' => array('0', '4', '5'),
 			),
 			'1' => array(
 				'a' => array('4', '5', '6'),
-				'b' => array('2'),
+				'b' => '2',
 			),
 			'2' => array(
 				'a' => array('3', '6'),
 				'b' => array('5', '6'),
 			),
 			'3' => array(
-				'a' => array('3'),
-				'b' => array('3'),
+				'a' => '3',
+				'b' => '3',
 			),
 			'4' => array(
 				'a' => array(),
-				'b' => array('5'),
+				'b' => '5',
 			),
 			'5' => array(
-				'a' => array('6'),
+				'a' => '6',
 				'b' => array(),
 			),
 			'6' => array(
-				'a' => array('6'),
-				'b' => array('6'),
+				'a' => '6',
+				'b' => '6',
 			),
 
-		), $a->getTransitions());
+		), array('0'), array('2', '3', '6'));
 
-
-		$this->assertTrue(count(array_diff(array('2', '3', '6'), $a->getFinals())) === 0);
+		$this->assertEquals($expected, $a);
 	}
 
 
@@ -239,52 +238,52 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$a = $this->createFirstAutomaton()->determinize();
 		$expected = new Automaton\Automaton(array(
 			'[0]' => array(
-				'a' => array('[0, 1]'),
-				'b' => array('[0, 4, 5]'),
+				'a' => '[0, 1]',
+				'b' => '[0, 4, 5]',
 			),
 			'[0, 1]' => array(
-				'a' => array('[0, 1, 4, 5, 6]'),
-				'b' => array('[0, 2, 4, 5]'),
+				'a' => '[0, 1, 4, 5, 6]',
+				'b' => '[0, 2, 4, 5]',
 			),
 			'[0, 4, 5]' => array(
-				'a' => array('[0, 1, 6]'),
-				'b' => array('[0, 4, 5]'),
+				'a' => '[0, 1, 6]',
+				'b' => '[0, 4, 5]',
 			),
 			'[0, 1, 4, 5, 6]' => array(
-				'a' => array('[0, 1, 4, 5, 6]'),
-				'b' => array('[0, 2, 4, 5, 6]'),
+				'a' => '[0, 1, 4, 5, 6]',
+				'b' => '[0, 2, 4, 5, 6]',
 			),
 			'[0, 2, 4, 5]' => array(
-				'a' => array('[0, 1, 3, 6]'),
-				'b' => array('[0, 4, 5, 6]'),
+				'a' => '[0, 1, 3, 6]',
+				'b' => '[0, 4, 5, 6]',
 			),
 			'[0, 1, 6]' => array(
-				'a' => array('[0, 1, 4, 5, 6]'),
-				'b' => array('[0, 2, 4, 5, 6]'),
+				'a' => '[0, 1, 4, 5, 6]',
+				'b' => '[0, 2, 4, 5, 6]',
 			),
 			'[0, 2, 4, 5, 6]' => array(
-				'a' => array('[0, 1, 3, 6]'),
-				'b' => array('[0, 4, 5, 6]'),
+				'a' => '[0, 1, 3, 6]',
+				'b' => '[0, 4, 5, 6]',
 			),
 			'[0, 1, 3, 6]' => array(
-				'a' => array('[0, 1, 3, 4, 5, 6]'),
-				'b' => array('[0, 2, 3, 4, 5, 6]'),
+				'a' => '[0, 1, 3, 4, 5, 6]',
+				'b' => '[0, 2, 3, 4, 5, 6]',
 			),
 			'[0, 4, 5, 6]' => array(
-				'a' => array('[0, 1, 6]'),
-				'b' => array('[0, 4, 5, 6]'),
+				'a' => '[0, 1, 6]',
+				'b' => '[0, 4, 5, 6]',
 			),
 			'[0, 1, 3, 4, 5, 6]' => array(
-				'a' => array('[0, 1, 3, 4, 5, 6]'),
-				'b' => array('[0, 2, 3, 4, 5, 6]'),
+				'a' => '[0, 1, 3, 4, 5, 6]',
+				'b' => '[0, 2, 3, 4, 5, 6]',
 			),
 			'[0, 2, 3, 4, 5, 6]' => array(
-				'a' => array('[0, 1, 3, 6]'),
-				'b' => array('[0, 3, 4, 5, 6]'),
+				'a' => '[0, 1, 3, 6]',
+				'b' => '[0, 3, 4, 5, 6]',
 			),
 			'[0, 3, 4, 5, 6]' => array(
-				'a' => array('[0, 1, 3, 6]'),
-				'b' => array('[0, 3, 4, 5, 6]'),
+				'a' => '[0, 1, 3, 6]',
+				'b' => '[0, 3, 4, 5, 6]',
 			),
 
 		), array('[0]'), array('[0, 1, 4, 5, 6]', '[0, 2, 4, 5]', '[0, 1, 6]', '[0, 2, 4, 5, 6]', '[0, 1, 3, 6]', '[0, 4, 5, 6]', '[0, 1, 3, 4, 5, 6]', '[0, 2, 3, 4, 5, 6]', '[0, 3, 4, 5, 6]'));
@@ -297,28 +296,28 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$b = $this->createSecondAutomaton()->determinize();
 		$expected = new Automaton\Automaton(array(
 			'[1, 2]' => array(
-				'a' => array('[2, 3]'),
-				'b' => array('[2, 3]'),
+				'a' => '[2, 3]',
+				'b' => '[2, 3]',
 			),
 			'[2, 3]' => array(
-				'a' => array('[1, 2, 3]'),
-				'b' => array('[3]'),
+				'a' => '[1, 2, 3]',
+				'b' => '[3]',
 			),
 			'[1, 2, 3]' => array(
-				'a' => array('[1, 2, 3]'),
-				'b' => array('[2, 3]'),
+				'a' => '[1, 2, 3]',
+				'b' => '[2, 3]',
 			),
 			'[3]' => array(
-				'a' => array('[1]'),
-				'b' => array('[]'),
+				'a' => '[1]',
+				'b' => '[]',
 			),
 			'[1]' => array(
-				'a' => array('[]'),
-				'b' => array('[2, 3]'),
+				'a' => '[]',
+				'b' => '[2, 3]',
 			),
 			'[]' => array(
-				'a' => array('[]'),
-				'b' => array('[]'),
+				'a' => '[]',
+				'b' => '[]',
 			),
 
 		), array('[1, 2]'), array('[1, 2]', '[1, 2, 3]', '[1]'));
@@ -332,24 +331,24 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		$expected = new Automaton\Automaton(array(
 			'[q0]' => array(
-				'0' => array('[q1]'),
-				'1' => array('[q0]'),
+				'0' => '[q1]',
+				'1' => '[q0]',
 			),
 			'[q1]' => array(
-				'0' => array('[q2]'),
-				'1' => array('[q1]'),
+				'0' => '[q2]',
+				'1' => '[q1]',
 			),
 			'[q2]' => array(
-				'0' => array('[q3]'),
-				'1' => array('[q2]'),
+				'0' => '[q3]',
+				'1' => '[q2]',
 			),
 			'[q3]' => array(
-				'0' => array('[q4]'),
-				'1' => array('[q3]'),
+				'0' => '[q4]',
+				'1' => '[q3]',
 			),
 			'[q4]' => array(
-				'0' => array('[q2]'),
-				'1' => array('[q4]'),
+				'0' => '[q2]',
+				'1' => '[q4]',
 			),
 
 		), array('[q0]'), array('[q2]'));
@@ -367,20 +366,20 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		$expected = new Automaton\Automaton(array(
 			'1' => array(
-				'a' => array('2'),
-				'b' => array('3'),
+				'a' => '2',
+				'b' => '3',
 			),
 			'2' => array(
-				'a' => array('4'),
-				'b' => array('4'),
+				'a' => '4',
+				'b' => '4',
 			),
 			'3' => array(
-				'a' => array('4'),
-				'b' => array('3'),
+				'a' => '4',
+				'b' => '3',
 			),
 			'4' => array(
-				'a' => array('4'),
-				'b' => array('4'),
+				'a' => '4',
+				'b' => '4',
 			),
 
 		), array('1'), array('4'));
@@ -395,16 +394,16 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		$expected = new Automaton\Automaton(array(
 			'1' => array(
-				'0' => array('3'),
-				'1' => array('3'),
+				'0' => '3',
+				'1' => '3',
 			),
 			'2' => array(
-				'0' => array('2'),
-				'1' => array('2'),
+				'0' => '2',
+				'1' => '2',
 			),
 			'3' => array(
-				'0' => array('2'),
-				'1' => array('3'),
+				'0' => '2',
+				'1' => '3',
 			),
 
 		), array('1'), array('3'));
@@ -418,22 +417,61 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		$expected = new Automaton\Automaton(array(
 			'1' => array(
-				'0' => array('2'),
-				'1' => array('1'),
+				'0' => '2',
+				'1' => '1',
 			),
 			'2' => array(
-				'0' => array('3'),
-				'1' => array('2'),
+				'0' => '3',
+				'1' => '2',
 			),
 			'3' => array(
-				'0' => array('1'),
-				'1' => array('3'),
+				'0' => '1',
+				'1' => '3',
 			),
 		), array('1'), array('3'));
 
 		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
 
 		$this->assertEquals($expected, $c);
+	}
+
+
+
+	function testNormalization()
+	{
+		$a = $this->createFifthAutomaton()->normalize();
+
+		$expected = new Automaton\Automaton(array(
+			'1' => array(
+				'0' => '2',
+				'1' => '3',
+			),
+			'2' => array(
+				'0' => '4',
+				'1' => '5',
+			),
+			'3' => array(
+				'0' => '4',
+				'1' => '2',
+			),
+			'4' => array(
+				'0' => '6',
+				'1' => '5',
+			),
+			'5' => array(
+				'0' => '2',
+				'1' => '6',
+			),
+			'6' => array(
+				'0' => '3',
+				'1' => '1',
+			),
+
+		), array('1'), array('5', '6'));
+
+		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
+
+		$this->assertEquals($expected, $a);
 	}
 
 
@@ -446,20 +484,20 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(new Automaton\Automaton(array(
 			'1' => array(
-				'a' => array('2'),
-				'b' => array('3'),
+				'a' => '2',
+				'b' => '3',
 			),
 			'2' => array(
-				'a' => array('4'),
-				'b' => array('4'),
+				'a' => '4',
+				'b' => '4',
 			),
 			'3' => array(
-				'a' => array('4'),
-				'b' => array('3'),
+				'a' => '4',
+				'b' => '3',
 			),
 			'4' => array(
-				'a' => array('4'),
-				'b' => array('4'),
+				'a' => '4',
+				'b' => '4',
 			),
 
 		), array('1'), array('1', '2', '3')), $a);
@@ -507,36 +545,36 @@ class BasicTest extends PHPUnit_Framework_TestCase
 			'0' => array(
 				'a' => array('0', '1'),
 				'b' => array('0', '4'),
-				'' => array('4'),
+				'' => '4',
 			),
 			'1' => array(
 				'a' => array('4', '5'),
-				'b' => array('2'),
-				'' => array('5'),
+				'b' => '2',
+				'' => '5',
 			),
 			'2' => array(
-				'a' => array('3'),
+				'a' => '3',
 				'b' => array('5', '6'),
-				'' => array('6'),
+				'' => '6',
 			),
 			'3' => array(
-				'a' => array('3'),
-				'b' => array('3'),
+				'a' => '3',
+				'b' => '3',
 				'' => array(),
 			),
 			'4' => array(
 				'a' => array(),
-				'b' => array('5'),
+				'b' => '5',
 				'' => array(),
 			),
 			'5' => array(
-				'a' => array('6'),
+				'a' => '6',
 				'b' => array(),
 				'' => array(),
 			),
 			'6' => array(
-				'a' => array('6'),
-				'b' => array('6'),
+				'a' => '6',
+				'b' => '6',
 				'' => array(),
 			),
 
@@ -554,10 +592,10 @@ class BasicTest extends PHPUnit_Framework_TestCase
 			),
 			'2' => array(
 				'a' => array('2', '3'),
-				'b' => array('3'),
+				'b' => '3',
 			),
 			'3' => array(
-				'a' => array('1'),
+				'a' => '1',
 				'b' => array(),
 			),
 
@@ -570,20 +608,20 @@ class BasicTest extends PHPUnit_Framework_TestCase
 	{
 		return new Automaton\Automaton(array(
 			'q1' => array(
-				'0' => array('q3'),
-				'1' => array('q2'),
+				'0' => 'q3',
+				'1' => 'q2',
 			),
 			'q2' => array(
-				'0' => array('q4'),
-				'1' => array('q2'),
+				'0' => 'q4',
+				'1' => 'q2',
 			),
 			'q3' => array(
-				'0' => array('q4'),
-				'1' => array('q3'),
+				'0' => 'q4',
+				'1' => 'q3',
 			),
 			'q4' => array(
-				'0' => array('q4'),
-				'1' => array('q4'),
+				'0' => 'q4',
+				'1' => 'q4',
 			),
 
 		), array('q1'), array('q2', 'q3'));
@@ -595,43 +633,76 @@ class BasicTest extends PHPUnit_Framework_TestCase
 	{
 		return new Automaton\Automaton(array(
 			'q0' => array(
-				'0' => array('q1'),
-				'1' => array('q0'),
+				'0' => 'q1',
+				'1' => 'q0',
 			),
 			'q1' => array(
-				'0' => array('q2'),
-				'1' => array('q1'),
+				'0' => 'q2',
+				'1' => 'q1',
 			),
 			'q2' => array(
-				'0' => array('q3'),
-				'1' => array('q2'),
+				'0' => 'q3',
+				'1' => 'q2',
 			),
 			'q3' => array(
-				'0' => array('q4'),
-				'1' => array('q3'),
+				'0' => 'q4',
+				'1' => 'q3',
 			),
 			'q4' => array(
-				'0' => array('q2'),
-				'1' => array('q4'),
+				'0' => 'q2',
+				'1' => 'q4',
 			),
 			'q5' => array(
-				'0' => array('q1'),
-				'1' => array('q4'),
+				'0' => 'q1',
+				'1' => 'q4',
 			),
 			'q6' => array(
-				'0' => array('q3'),
-				'1' => array('q4'),
+				'0' => 'q3',
+				'1' => 'q4',
 			),
 			'q7' => array(
-				'0' => array('q6'),
-				'1' => array('q5'),
+				'0' => 'q6',
+				'1' => 'q5',
 			),
 			'q8' => array(
-				'0' => array('q7'),
-				'1' => array('q5'),
+				'0' => 'q7',
+				'1' => 'q5',
 			),
 
 		), array('q0'), array('q2'));
+	}
+
+
+
+	protected function createFifthAutomaton()
+	{
+		return new Automaton\Automaton(array(
+			'q0' => array(
+				'0' => 'q2',
+				'1' => 'q1',
+			),
+			'q1' => array(
+				'0' => 'q4',
+				'1' => 'q2',
+			),
+			'q2' => array(
+				'0' => 'q4',
+				'1' => 'q5',
+			),
+			'q3' => array(
+				'0' => 'q1',
+				'1' => 'q0',
+			),
+			'q4' => array(
+				'0' => 'q3',
+				'1' => 'q5',
+			),
+			'q5' => array(
+				'0' => 'q2',
+				'1' => 'q3',
+			),
+
+		), array('q0'), array('q3', 'q5'));
 	}
 
 }

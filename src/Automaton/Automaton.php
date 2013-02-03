@@ -355,8 +355,9 @@ class Automaton
 
 		$alphabet = $this->alphabet;
 		ksort($alphabet);
-		$map = array(reset($this->initials) => TRUE);
-		$i = 0;
+		$i = '1';
+		$map = array(reset($this->initials) => $i);
+		$stateCount = count($this->states);
 
 		$queue = $this->initials;
 		while (list($state, ) = each($queue)) {
@@ -364,7 +365,7 @@ class Automaton
 				$target = reset($this->transitions[$state][$symbol]);
 				if (!isset($map[$target])) {
 					$map[$target] = (string) ++$i;
-					if ($i === count($this->states)) { // all states mapped
+					if ($i === $stateCount) { // all states mapped
 						break 2;
 					}
 				}
@@ -374,24 +375,28 @@ class Automaton
 		}
 
 		$this->states = Helpers::valuesToKeys($map);
+
 		$delta = array();
 		foreach ($this->transitions as $state => $transitions) {
 			$delta[$map[$state]] = array();
 			foreach ($transitions as $symbol => $targets) {
-				$delta[$map[$state]] = array($map[reset($targets)]);
+				$delta[$map[$state]][$symbol] = array($map[reset($targets)]);
 			}
 		}
 
+		ksort($delta);
 		$this->transitions = $delta;
 
 		$initials = $finals = array();
-		foreach (array('initials', 'finals') as $set) {
-			foreach ($this->$set as $state => $foo) {
-				$$set[$map[$state]] = TRUE;
-			}
-
-			$this->$set = $$set;
+		foreach ($this->initials as $state => $foo) {
+			$initials[$map[$state]] = TRUE;
 		}
+
+		foreach ($this->finals as $state => $foo) {
+			$finals[$map[$state]] = TRUE;
+		}
+
+		return $this;
 	}
 
 

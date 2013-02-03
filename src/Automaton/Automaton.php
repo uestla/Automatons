@@ -50,8 +50,6 @@ class Automaton
 
 
 
-	// === MANIPULATIONS ======================================================
-
 	/**
 	 * States array structure:
 	 *
@@ -130,6 +128,8 @@ class Automaton
 	}
 
 
+
+	// === MANIPULATIONS ======================================================
 
 	/** @return Automaton */
 	function removeEpsilon()

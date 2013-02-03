@@ -8,8 +8,8 @@ class EqualityTest extends PHPUnit_Framework_TestCase
 
 	function testEquality()
 	{
-		$this->assertTrue(static::createFirstAutomaton()->isEqual(static::createFirstAutomaton()));
-		$this->assertTrue(static::createFirstAutomaton()->isEqual(static::createSecondAutomaton()));
+		$this->assertTrue(static::createFirstAutomaton()->equals(static::createFirstAutomaton()));
+		$this->assertTrue(static::createFirstAutomaton()->equals(static::createSecondAutomaton()));
 	}
 
 

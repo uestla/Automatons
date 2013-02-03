@@ -21,6 +21,25 @@ namespace Automaton;
 abstract class Helpers
 {
 	/**
+	 * Tells whether two automatons are equal.
+	 *
+	 * @param  Automaton
+	 * @param  Automaton
+	 * @return bool are automatons equal?
+	 */
+	static function compare(Automaton $a, Automaton $b)
+	{
+		// prevent automatons change
+		$a = clone $a;
+		$b = clone $b;
+
+		return $a->normalize() == $b->normalize(); // intentionally ==
+	}
+
+
+
+
+	/**
 	 * Turns array('one', 'two') into array('one' => TRUE, 'two' => TRUE)
 	 * for faster item existence testing (just type isset($array['one'])
 	 * instead of in_array('one', $array, TRUE))

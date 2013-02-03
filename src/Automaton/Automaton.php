@@ -423,12 +423,9 @@ class Automaton
 	 * @param  Automaton
 	 * @return bool
 	 */
-	function isEqual(Automaton $a)
+	function equals(Automaton $a)
 	{
-		$a = clone $a;
-		$b = clone $this;
-
-		return $a->normalize() == $b->normalize(); // intentionally ==
+		return Helpers::compare($a, $this);
 	}
 
 

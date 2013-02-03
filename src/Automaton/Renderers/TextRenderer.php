@@ -67,13 +67,13 @@ class TextRenderer implements IRenderer
 
 		// === BODY ======================
 		foreach ($a->getTransitions() as $state => $transitions) {
-			$out = $a->isInitialState($state) && $a->isFinalState($state)
-					? static::SYMBOL_BOTH . ' '
-					: (
-						$a->isInitialState($state)
-								? static::SYMBOL_INITIAL . ' '
-								: ($a->isFinalState($state) ? static::SYMBOL_FINAL . ' ' : '')
-					)
+			$out = ($a->isInitialState($state) && $a->isFinalState($state)
+				? static::SYMBOL_BOTH . ' '
+				: (
+					$a->isInitialState($state)
+						? static::SYMBOL_INITIAL . ' '
+						: ($a->isFinalState($state) ? static::SYMBOL_FINAL . ' ' : '')
+				))
 				. $state;
 
 			echo "\n|", str_repeat(' ', $widths['states'] - strlen($out) - 1), $out, ' |';

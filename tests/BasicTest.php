@@ -140,7 +140,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testGetters()
 	{
-		$a = $this->createTestingAutomaton();
+		$a = $this->createBigAutomaton();
 
 		$this->assertEquals(array('a', 'b'), $a->getAlphabet());
 		$this->assertEquals(array('0', '1', '2', '3', '4', '5', '6'), $a->getStates());
@@ -152,7 +152,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testDeterminism()
 	{
-		$a = $this->createTestingAutomaton();
+		$a = $this->createBigAutomaton();
 		$this->assertFalse($a->isDeterministic());
 
 		$a->removeEpsilon();
@@ -162,60 +162,13 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$a->determinize();
 		$this->assertTrue($a->isDeterministic());
 		$this->assertEquals($a, $a->determinize());
-
-
-		$b = new Automaton\Automaton(array(
-			'1' => array(
-				'a' => array(),
-				'b' => array('2', '3'),
-			),
-			'2' => array(
-				'a' => array('2', '3'),
-				'b' => array('3'),
-			),
-			'3' => array(
-				'a' => array('1'),
-				'b' => array(),
-			),
-
-		), array('1', '2'), array('1'));
-
-		$b->determinize();
-
-		$this->assertEquals(new Automaton\Automaton(array(
-			'[1, 2]' => array(
-				'a' => array('[2, 3]'),
-				'b' => array('[2, 3]'),
-			),
-			'[2, 3]' => array(
-				'a' => array('[1, 2, 3]'),
-				'b' => array('[3]'),
-			),
-			'[1, 2, 3]' => array(
-				'a' => array('[1, 2, 3]'),
-				'b' => array('[2, 3]'),
-			),
-			'[3]' => array(
-				'a' => array('[1]'),
-				'b' => array('[]'),
-			),
-			'[1]' => array(
-				'a' => array('[]'),
-				'b' => array('[2, 3]'),
-			),
-			'[]' => array(
-				'a' => array('[]'),
-				'b' => array('[]'),
-			),
-
-		), array('[1, 2]'), array('[1, 2]', '[1, 2, 3]', '[1]')), $b);
 	}
 
 
 
 	function testEpsilonRemoving()
 	{
-		$a = $this->createTestingAutomaton()->removeEpsilon();
+		$a = $this->createBigAutomaton()->removeEpsilon();
 
 		$this->assertEquals(array(
 			'0' => array(
@@ -257,7 +210,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testEpsilonClosure()
 	{
-		$a = $this->createTestingAutomaton();
+		$a = $this->createBigAutomaton();
 
 		$this->assertEquals(array('0', '4'), $a->epsilonClosure('0'));
 		$this->assertEquals(array('1', '5'), $a->epsilonClosure('1'));
@@ -275,9 +228,9 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testDeterminization()
 	{
-		$a = $this->createTestingAutomaton()->determinize();
+		$a = $this->createBigAutomaton()->determinize();
 
-		$this->assertEquals(array(
+		$this->assertEquals(new Automaton\Automaton(array(
 			'[0]' => array(
 				'a' => array('[0, 1]'),
 				'b' => array('[0, 4, 5]'),
@@ -327,14 +280,45 @@ class BasicTest extends PHPUnit_Framework_TestCase
 				'b' => array('[0, 3, 4, 5, 6]'),
 			),
 
-		), $a->getTransitions());
+		), array('[0]'), array('[0, 1, 4, 5, 6]', '[0, 2, 4, 5]', '[0, 1, 6]', '[0, 2, 4, 5, 6]', '[0, 1, 3, 6]', '[0, 4, 5, 6]', '[0, 1, 3, 4, 5, 6]', '[0, 2, 3, 4, 5, 6]', '[0, 3, 4, 5, 6]')), $a);
+
+
+		$b = $this->createSmallAutomaton()->determinize();
+
+		$this->assertEquals(new Automaton\Automaton(array(
+			'[1, 2]' => array(
+				'a' => array('[2, 3]'),
+				'b' => array('[2, 3]'),
+			),
+			'[2, 3]' => array(
+				'a' => array('[1, 2, 3]'),
+				'b' => array('[3]'),
+			),
+			'[1, 2, 3]' => array(
+				'a' => array('[1, 2, 3]'),
+				'b' => array('[2, 3]'),
+			),
+			'[3]' => array(
+				'a' => array('[1]'),
+				'b' => array('[]'),
+			),
+			'[1]' => array(
+				'a' => array('[]'),
+				'b' => array('[2, 3]'),
+			),
+			'[]' => array(
+				'a' => array('[]'),
+				'b' => array('[]'),
+			),
+
+		), array('[1, 2]'), array('[1, 2]', '[1, 2, 3]', '[1]')), $b);
 	}
 
 
 
 	function testMinimization()
 	{
-		$a = $this->createTestingAutomaton()->minimize();
+		$a = $this->createBigAutomaton()->minimize();
 
 		$this->assertEquals(new Automaton\Automaton(array(
 			'1' => array(
@@ -361,7 +345,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testComplement()
 	{
-		$a = $this->createTestingAutomaton()->minimize()->getComplement();
+		$a = $this->createBigAutomaton()->minimize()->getComplement();
 		$this->assertEquals(new Automaton\Automaton(array(
 			'1' => array(
 				'a' => array('2'),
@@ -387,24 +371,29 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testRendering()
 	{
-		$a = $this->createTestingAutomaton();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/basic'));
+		$a = $this->createBigAutomaton();
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/basic'));
 		$actual = Strings::normalize((string) $a);
 		$this->assertEquals($expected, $actual);
 
 		$a->removeEpsilon();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/epsilon-removed'));
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/epsilon-removed'));
 		$actual = Strings::normalize((string) $a);
 		$this->assertEquals($expected, $actual);
 
 		$a->determinize();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/determinized'));
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/determinized'));
 		$actual = Strings::normalize((string) $a);
 		$this->assertEquals($expected, $actual);
 
 		$a->minimize();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/minimized'));
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/minimized'));
 		$actual = Strings::normalize((string) $a);
+		$this->assertEquals($expected, $actual);
+
+		$b = $this->createSmallAutomaton()->determinize();
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/small/determinized'));
+		$actual = Strings::normalize((string) $b);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -412,49 +401,67 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	// === HELPERS ====================================================
 
-	protected function createTestingAutomaton()
+	protected function createBigAutomaton()
 	{
-		return new Automaton\Automaton(
-			array(
-				'0' => array(
-					'a' => array('0', '1'),
-					'b' => array('0', '4'),
-					'' => array('4'),
-				),
-				'1' => array(
-					'a' => array('4', '5'),
-					'b' => array('2'),
-					'' => array('5'),
-				),
-				'2' => array(
-					'a' => array('3'),
-					'b' => array('5', '6'),
-					'' => array('6'),
-				),
-				'3' => array(
-					'a' => array('3'),
-					'b' => array('3'),
-					'' => array(),
-				),
-				'4' => array(
-					'a' => array(),
-					'b' => array('5'),
-					'' => array(),
-				),
-				'5' => array(
-					'a' => array('6'),
-					'b' => array(),
-					'' => array(),
-				),
-				'6' => array(
-					'a' => array('6'),
-					'b' => array('6'),
-					'' => array(),
-				),
+		return new Automaton\Automaton(array(
+			'0' => array(
+				'a' => array('0', '1'),
+				'b' => array('0', '4'),
+				'' => array('4'),
 			),
-			'0',
-			array('3', '6')
-		);
+			'1' => array(
+				'a' => array('4', '5'),
+				'b' => array('2'),
+				'' => array('5'),
+			),
+			'2' => array(
+				'a' => array('3'),
+				'b' => array('5', '6'),
+				'' => array('6'),
+			),
+			'3' => array(
+				'a' => array('3'),
+				'b' => array('3'),
+				'' => array(),
+			),
+			'4' => array(
+				'a' => array(),
+				'b' => array('5'),
+				'' => array(),
+			),
+			'5' => array(
+				'a' => array('6'),
+				'b' => array(),
+				'' => array(),
+			),
+			'6' => array(
+				'a' => array('6'),
+				'b' => array('6'),
+				'' => array(),
+			),
+
+		), '0', array('3', '6'));
+	}
+
+
+
+	protected function createSmallAutomaton()
+	{
+		return new Automaton\Automaton(array(
+			'1' => array(
+				'a' => array(),
+				'b' => array('2', '3'),
+			),
+			'2' => array(
+				'a' => array('2', '3'),
+				'b' => array('3'),
+			),
+			'3' => array(
+				'a' => array('1'),
+				'b' => array(),
+			),
+
+		), array('1', '2'), array('1'));
 	}
 
 }

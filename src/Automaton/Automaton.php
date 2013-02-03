@@ -266,14 +266,14 @@ class Automaton
 	{
 		$this->determinize();
 
-		$transGroups['II'] = $transGroups['I'] = $transGroups = array();
+		$transGroups['2'] = $transGroups['1'] = $transGroups = array();
 		foreach ($this->states as $state => $foo) {
-			$group = isset($this->finals[$state]) ? 'II' : 'I';
+			$group = isset($this->finals[$state]) ? '2' : '1';
 			$transGroups[$group][$state] = array();
 
 			foreach ($this->alphabet as $symbol => $foo) {
 				$target = reset($this->transitions[$state][$symbol]);
-				$transGroups[$group][$state][$symbol] = isset($this->finals[$target]) ? 'II' : 'I';
+				$transGroups[$group][$state][$symbol] = isset($this->finals[$target]) ? '2' : '1';
 			}
 		}
 
@@ -282,11 +282,11 @@ class Automaton
 			$newTrans = $groupMap = array();
 
 			foreach ($transGroups as $states) {
-				$name = str_repeat('I', ++$i);
+				$name = (string) ++$i;
 				$newTrans[$name] = array();
 				foreach ($states as $state => $transitions) {
 					if (reset($newTrans[$name]) !== FALSE && !in_array($transitions, $newTrans[$name], TRUE)) {
-						$name = str_repeat('I', ++$i);
+						$name = (string) ++$i;
 						$newTrans[$name] = array();
 					}
 

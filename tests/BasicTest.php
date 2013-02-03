@@ -337,24 +337,24 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$a = $this->createTestingAutomaton()->minimize();
 
 		$this->assertEquals(new Automaton\Automaton(array(
-			'I' => array(
-				'a' => array('II'),
-				'b' => array('III'),
+			'1' => array(
+				'a' => array('2'),
+				'b' => array('3'),
 			),
-			'II' => array(
-				'a' => array('IIII'),
-				'b' => array('IIII'),
+			'2' => array(
+				'a' => array('4'),
+				'b' => array('4'),
 			),
-			'III' => array(
-				'a' => array('IIII'),
-				'b' => array('III'),
+			'3' => array(
+				'a' => array('4'),
+				'b' => array('3'),
 			),
-			'IIII' => array(
-				'a' => array('IIII'),
-				'b' => array('IIII'),
+			'4' => array(
+				'a' => array('4'),
+				'b' => array('4'),
 			),
 
-		), array('I'), array('IIII')), $a);
+		), array('1'), array('4')), $a);
 	}
 
 
@@ -363,24 +363,24 @@ class BasicTest extends PHPUnit_Framework_TestCase
 	{
 		$a = $this->createTestingAutomaton()->minimize()->getComplement();
 		$this->assertEquals(new Automaton\Automaton(array(
-			'I' => array(
-				'a' => array('II'),
-				'b' => array('III'),
+			'1' => array(
+				'a' => array('2'),
+				'b' => array('3'),
 			),
-			'II' => array(
-				'a' => array('IIII'),
-				'b' => array('IIII'),
+			'2' => array(
+				'a' => array('4'),
+				'b' => array('4'),
 			),
-			'III' => array(
-				'a' => array('IIII'),
-				'b' => array('III'),
+			'3' => array(
+				'a' => array('4'),
+				'b' => array('3'),
 			),
-			'IIII' => array(
-				'a' => array('IIII'),
-				'b' => array('IIII'),
+			'4' => array(
+				'a' => array('4'),
+				'b' => array('4'),
 			),
 
-		), array('I'), array('I', 'II', 'III')), $a);
+		), array('1'), array('1', '2', '3')), $a);
 	}
 
 

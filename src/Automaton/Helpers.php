@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the Automaton package
+ * This file is part of the Automatons library
  *
  * Copyright (c) 2013 Petr Kessler (http://kesspess.1991.cz)
  *

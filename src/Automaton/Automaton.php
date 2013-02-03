@@ -465,6 +465,10 @@ class Automaton
 	 */
 	function isInitialState($state)
 	{
+		if (!isset($this->states[$state])) {
+			throw new StateNotFoundException("State '$state' not found.");
+		}
+
 		return isset($this->initials[$state]);
 	}
 
@@ -484,6 +488,10 @@ class Automaton
 	 */
 	function isFinalState($state)
 	{
+		if (!isset($this->states[$state])) {
+			throw new StateNotFoundException("State '$state' not found.");
+		}
+
 		return isset($this->finals[$state]);
 	}
 

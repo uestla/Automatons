@@ -20,6 +20,26 @@ class FirstAutomatonTest extends PHPUnit_Framework_TestCase
 
 
 
+	function testStateExistence()
+	{
+		$a = static::createAutomaton();
+
+		try {
+			$a->isInitialState('asdf');
+			$this->fail();
+
+		} catch (Automaton\StateNotFoundException $e) {}
+
+
+		try {
+			$a->isFinalState('asdf');
+			$this->fail();
+
+		} catch (Automaton\StateNotFoundException $e) {}
+	}
+
+
+
 	// === MANIPULATIONS ====================================================
 
 	function testEpsilonClosure()

@@ -78,6 +78,6 @@ abstract class Helpers
 		}
 
 		$s = substr($s, 1, -1);
-		return strlen($s) ? explode(', ', $s) : array();
+		return $s === '' ? array() : explode(', ', $s);
 	}
 }

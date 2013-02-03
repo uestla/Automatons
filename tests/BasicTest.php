@@ -326,45 +326,45 @@ class BasicTest extends PHPUnit_Framework_TestCase
 	protected function createTestingAutomaton()
 	{
 		return new Automaton\Automaton(
-				array(
-					'0' => array(
-						'a' => array('0', '1'),
-						'b' => array('0', '4'),
-						'' => array('4'),
-					),
-					'1' => array(
-						'a' => array('4', '5'),
-						'b' => array('2'),
-						'' => array('5'),
-					),
-					'2' => array(
-						'a' => array('3'),
-						'b' => array('5', '6'),
-						'' => array('6'),
-					),
-					'3' => array(
-						'a' => array('3'),
-						'b' => array('3'),
-						'' => array(),
-					),
-					'4' => array(
-						'a' => array(),
-						'b' => array('5'),
-						'' => array(),
-					),
-					'5' => array(
-						'a' => array('6'),
-						'b' => array(),
-						'' => array(),
-					),
-					'6' => array(
-						'a' => array('6'),
-						'b' => array('6'),
-						'' => array(),
-					),
+			array(
+				'0' => array(
+					'a' => array('0', '1'),
+					'b' => array('0', '4'),
+					'' => array('4'),
 				),
-				'0',
-				array('3', '6')
+				'1' => array(
+					'a' => array('4', '5'),
+					'b' => array('2'),
+					'' => array('5'),
+				),
+				'2' => array(
+					'a' => array('3'),
+					'b' => array('5', '6'),
+					'' => array('6'),
+				),
+				'3' => array(
+					'a' => array('3'),
+					'b' => array('3'),
+					'' => array(),
+				),
+				'4' => array(
+					'a' => array(),
+					'b' => array('5'),
+					'' => array(),
+				),
+				'5' => array(
+					'a' => array('6'),
+					'b' => array(),
+					'' => array(),
+				),
+				'6' => array(
+					'a' => array('6'),
+					'b' => array('6'),
+					'' => array(),
+				),
+			),
+			'0',
+			array('3', '6')
 		);
 	}
 

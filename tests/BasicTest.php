@@ -167,6 +167,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		$this->assertFalse($this->createSecondAutomaton()->isDeterministic());
 		$this->assertTrue($this->createThirdAutomaton()->isDeterministic());
+		$this->assertFalse($this->createFourthAutomaton()->isDeterministic());
 	}
 
 
@@ -325,6 +326,37 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
 
 		$this->assertEquals($expected, $b);
+
+
+		$c = $this->createFourthAutomaton()->determinize();
+
+		$expected = new Automaton\Automaton(array(
+			'[q0]' => array(
+				'0' => array('[q1]'),
+				'1' => array('[q0]'),
+			),
+			'[q1]' => array(
+				'0' => array('[q2]'),
+				'1' => array('[q1]'),
+			),
+			'[q2]' => array(
+				'0' => array('[q3]'),
+				'1' => array('[q2]'),
+			),
+			'[q3]' => array(
+				'0' => array('[q4]'),
+				'1' => array('[q3]'),
+			),
+			'[q4]' => array(
+				'0' => array('[q2]'),
+				'1' => array('[q4]'),
+			),
+
+		), array('[q0]'), array('[q2]'));
+
+		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
+
+		$this->assertEquals($expected, $c);
 	}
 
 
@@ -380,6 +412,28 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
 
 		$this->assertEquals($expected, $b);
+
+
+		$c = $this->createFourthAutomaton()->minimize();
+
+		$expected = new Automaton\Automaton(array(
+			'1' => array(
+				'0' => array('2'),
+				'1' => array('1'),
+			),
+			'2' => array(
+				'0' => array('3'),
+				'1' => array('2'),
+			),
+			'3' => array(
+				'0' => array('1'),
+				'1' => array('3'),
+			),
+		), array('1'), array('3'));
+
+		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
+
+		$this->assertEquals($expected, $c);
 	}
 
 
@@ -539,7 +593,45 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	protected function createFourthAutomaton()
 	{
-		// ...
+		return new Automaton\Automaton(array(
+			'q0' => array(
+				'0' => array('q1'),
+				'1' => array('q0'),
+			),
+			'q1' => array(
+				'0' => array('q2'),
+				'1' => array('q1'),
+			),
+			'q2' => array(
+				'0' => array('q3'),
+				'1' => array('q2'),
+			),
+			'q3' => array(
+				'0' => array('q4'),
+				'1' => array('q3'),
+			),
+			'q4' => array(
+				'0' => array('q2'),
+				'1' => array('q4'),
+			),
+			'q5' => array(
+				'0' => array('q1'),
+				'1' => array('q4'),
+			),
+			'q6' => array(
+				'0' => array('q3'),
+				'1' => array('q4'),
+			),
+			'q7' => array(
+				'0' => array('q6'),
+				'1' => array('q5'),
+			),
+			'q8' => array(
+				'0' => array('q7'),
+				'1' => array('q5'),
+			),
+
+		), array('q0'), array('q2'));
 	}
 
 }

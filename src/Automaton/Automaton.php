@@ -283,16 +283,23 @@ class Automaton
 			$newTrans = $groupMap = array();
 
 			foreach ($transGroups as $states) {
-				$name = (string) ++$i;
-				$newTrans[$name] = array();
+				$names = array(); // new groups created by splitting the actual one
+
 				foreach ($states as $state => $transitions) {
-					if (reset($newTrans[$name]) !== FALSE && !in_array($transitions, $newTrans[$name], TRUE)) {
-						$name = (string) ++$i;
-						$newTrans[$name] = array();
+					$tmp = NULL; // name of group containing $transitions
+					foreach ($names as $name) {
+						if (in_array($transitions, $newTrans[$name], TRUE)) {
+							$tmp = $name;
+							break;
+						}
 					}
 
-					$newTrans[$name][$state] = $transitions;
-					$groupMap[$state] = $name;
+					if ($tmp === NULL) { // not found, create new one
+						$newTrans[$tmp = $names[] = (string) ++$i] = array();
+					}
+
+					$newTrans[$tmp][$state] = $transitions;
+					$groupMap[$state] = $tmp;
 				}
 			}
 
@@ -341,6 +348,55 @@ class Automaton
 		$this->transitions = $delta;
 
 		return $this;
+	}
+
+
+
+	/** @return Automaton */
+	function normalize()
+	{
+		$this->minimize();
+
+		$alphabet = $this->alphabet;
+		ksort($alphabet);
+		$map = array(reset($this->initials) => TRUE);
+		$i = 0;
+
+		$queue = $this->initials;
+		while (list($state, ) = each($queue)) {
+			foreach ($alphabet as $symbol => $foo) {
+				$target = reset($this->transitions[$state][$symbol]);
+				if (!isset($map[$target])) {
+					$map[$target] = (string) ++$i;
+					if ($i === count($this->states)) { // all states mapped
+						break 2;
+					}
+				}
+
+				$queue[$target] = TRUE;
+			}
+		}
+
+		$this->states = Helpers::valuesToKeys($map);
+		$delta = array();
+		foreach ($this->transitions as $state => $transitions) {
+			$delta[$map[$state]] = array();
+			foreach ($transitions as $symbol => $targets) {
+				$delta[$map[$state]] = array($map[reset($targets)]);
+			}
+		}
+
+		$this->transitions = $delta;
+
+		// TODO: same approach in determinization
+		$initials = $finals = array();
+		foreach (array('initials', 'finals') as $set) {
+			foreach ($this->$set as $state => $foo) {
+				$$set[$map[$state]] = TRUE;
+			}
+
+			$this->$set = $$set;
+		}
 	}
 
 

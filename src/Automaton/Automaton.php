@@ -247,16 +247,21 @@ class Automaton
 			return ;
 		}
 
-		foreach ($this->transitions as $transitions) {
+		$reachable = array();
+		foreach ($this->transitions as $state => $transitions) {
+			isset($this->initials[$state]) && $reachable[$state] = TRUE;
+
 			foreach ($transitions as $targets) {
 				if (count($targets) !== 1) {
 					$this->isDeterministic = FALSE;
 					return ;
 				}
+
+				$reachable[reset($targets)] = TRUE;
 			}
 		}
 
-		$this->isDeterministic = TRUE;
+		$this->isDeterministic = count($reachable) === count($this->states);
 	}
 
 

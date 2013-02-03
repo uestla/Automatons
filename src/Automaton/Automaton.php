@@ -38,7 +38,7 @@ class Automaton
 
 
 	/** @var bool */
-	protected $isDeterministic;
+	protected $isDeterministic = NULL;
 
 	/** epsilon symbol */
 	const EPSILON = '';
@@ -123,8 +123,6 @@ class Automaton
 				$this->transitions[$state][$symbol] = array_unique($targets);
 			}
 		}
-
-		$this->discoverDeterminism();
 	}
 
 
@@ -160,7 +158,7 @@ class Automaton
 
 		$this->hasEpsilon = FALSE;
 		$this->transitions = $delta;
-		$this->discoverDeterminism();
+		$this->isDeterministic = NULL;
 
 		return $this;
 	}
@@ -194,7 +192,7 @@ class Automaton
 	/** @return Automaton */
 	function determinize()
 	{
-		if ($this->isDeterministic) {
+		if ($this->isDeterministic()) {
 			return $this;
 		}
 
@@ -239,12 +237,11 @@ class Automaton
 
 
 
-	/** @return void */
+	/** @return bool */
 	protected function discoverDeterminism()
 	{
 		if ($this->hasEpsilon || count($this->initials) > 1) {
-			$this->isDeterministic = FALSE;
-			return ;
+			return FALSE;
 		}
 
 		$reachable = array();
@@ -253,15 +250,14 @@ class Automaton
 
 			foreach ($transitions as $targets) {
 				if (count($targets) !== 1) {
-					$this->isDeterministic = FALSE;
-					return ;
+					return FALSE;
 				}
 
 				$reachable[reset($targets)] = TRUE;
 			}
 		}
 
-		$this->isDeterministic = count($reachable) === count($this->states);
+		return count($reachable) === count($this->states);
 	}
 
 
@@ -437,6 +433,10 @@ class Automaton
 	/** @return bool */
 	function isDeterministic()
 	{
+		if ($this->isDeterministic === NULL) {
+			$this->isDeterministic = $this->discoverDeterminism();
+		}
+
 		return $this->isDeterministic;
 	}
 

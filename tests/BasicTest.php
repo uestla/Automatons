@@ -9,6 +9,8 @@ require_once __DIR__ . '/bootstrap.php';
 class BasicTest extends PHPUnit_Framework_TestCase
 {
 
+	// === BASIC TESTS ====================================================
+
 	function testHelpers()
 	{
 		$this->assertEquals(array(
@@ -140,7 +142,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testGetters()
 	{
-		$a = $this->createBigAutomaton();
+		$a = $this->createFirstAutomaton();
 
 		$this->assertEquals(array('a', 'b'), $a->getAlphabet());
 		$this->assertEquals(array('0', '1', '2', '3', '4', '5', '6'), $a->getStates());
@@ -152,7 +154,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testDeterminism()
 	{
-		$a = $this->createBigAutomaton();
+		$a = $this->createFirstAutomaton();
 		$this->assertFalse($a->isDeterministic());
 
 		$a->removeEpsilon();
@@ -162,13 +164,18 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$a->determinize();
 		$this->assertTrue($a->isDeterministic());
 		$this->assertEquals($a, $a->determinize());
+
+		$this->assertFalse($this->createSecondAutomaton()->isDeterministic());
+		$this->assertTrue($this->createThirdAutomaton()->isDeterministic());
 	}
 
 
 
+	// === MANIPULATIONS ====================================================
+
 	function testEpsilonRemoving()
 	{
-		$a = $this->createBigAutomaton()->removeEpsilon();
+		$a = $this->createFirstAutomaton()->removeEpsilon();
 
 		$this->assertEquals(array(
 			'0' => array(
@@ -210,7 +217,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testEpsilonClosure()
 	{
-		$a = $this->createBigAutomaton();
+		$a = $this->createFirstAutomaton();
 
 		$this->assertEquals(array('0', '4'), $a->epsilonClosure('0'));
 		$this->assertEquals(array('1', '5'), $a->epsilonClosure('1'));
@@ -228,9 +235,8 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 	function testDeterminization()
 	{
-		$a = $this->createBigAutomaton()->determinize();
-
-		$this->assertEquals(new Automaton\Automaton(array(
+		$a = $this->createFirstAutomaton()->determinize();
+		$expected = new Automaton\Automaton(array(
 			'[0]' => array(
 				'a' => array('[0, 1]'),
 				'b' => array('[0, 4, 5]'),
@@ -280,12 +286,15 @@ class BasicTest extends PHPUnit_Framework_TestCase
 				'b' => array('[0, 3, 4, 5, 6]'),
 			),
 
-		), array('[0]'), array('[0, 1, 4, 5, 6]', '[0, 2, 4, 5]', '[0, 1, 6]', '[0, 2, 4, 5, 6]', '[0, 1, 3, 6]', '[0, 4, 5, 6]', '[0, 1, 3, 4, 5, 6]', '[0, 2, 3, 4, 5, 6]', '[0, 3, 4, 5, 6]')), $a);
+		), array('[0]'), array('[0, 1, 4, 5, 6]', '[0, 2, 4, 5]', '[0, 1, 6]', '[0, 2, 4, 5, 6]', '[0, 1, 3, 6]', '[0, 4, 5, 6]', '[0, 1, 3, 4, 5, 6]', '[0, 2, 3, 4, 5, 6]', '[0, 3, 4, 5, 6]'));
+
+		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
+
+		$this->assertEquals($expected, $a);
 
 
-		$b = $this->createSmallAutomaton()->determinize();
-
-		$this->assertEquals(new Automaton\Automaton(array(
+		$b = $this->createSecondAutomaton()->determinize();
+		$expected = new Automaton\Automaton(array(
 			'[1, 2]' => array(
 				'a' => array('[2, 3]'),
 				'b' => array('[2, 3]'),
@@ -311,14 +320,18 @@ class BasicTest extends PHPUnit_Framework_TestCase
 				'b' => array('[]'),
 			),
 
-		), array('[1, 2]'), array('[1, 2]', '[1, 2, 3]', '[1]')), $b);
+		), array('[1, 2]'), array('[1, 2]', '[1, 2, 3]', '[1]'));
+
+		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
+
+		$this->assertEquals($expected, $b);
 	}
 
 
 
 	function testMinimization()
 	{
-		$a = $this->createBigAutomaton()->minimize();
+		$a = $this->createFirstAutomaton()->minimize();
 
 		$expected = new Automaton\Automaton(array(
 			'1' => array(
@@ -340,15 +353,42 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 		), array('1'), array('4'));
 
+		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
+
 		$this->assertEquals($expected, $a);
 		$this->assertEquals($expected, $a->minimize());
+
+
+		$b = $this->createThirdAutomaton()->minimize();
+
+		$expected = new Automaton\Automaton(array(
+			'1' => array(
+				'0' => array('3'),
+				'1' => array('3'),
+			),
+			'2' => array(
+				'0' => array('2'),
+				'1' => array('2'),
+			),
+			'3' => array(
+				'0' => array('2'),
+				'1' => array('3'),
+			),
+
+		), array('1'), array('3'));
+
+		$expected->isDeterministic(); // intentionally due to lazy determinism property initialization
+
+		$this->assertEquals($expected, $b);
 	}
 
 
 
+	// === OPERATIONS ====================================================
+
 	function testComplement()
 	{
-		$a = $this->createBigAutomaton()->minimize()->getComplement();
+		$a = $this->createFirstAutomaton()->minimize()->getComplement();
 
 		$this->assertEquals(new Automaton\Automaton(array(
 			'1' => array(
@@ -373,39 +413,41 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 
 
+	// === RENDERING ====================================================
+
 	function testRendering()
 	{
-		$a = $this->createBigAutomaton();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/basic'));
+		$a = $this->createFirstAutomaton();
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/first/basic'));
 		$actual = Strings::normalize((string) $a);
 		$this->assertEquals($expected, $actual);
 
 		$a->removeEpsilon();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/epsilon-removed'));
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/first/epsilon-removed'));
 		$actual = Strings::normalize((string) $a);
 		$this->assertEquals($expected, $actual);
 
 		$a->determinize();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/determinized'));
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/first/determinized'));
 		$actual = Strings::normalize((string) $a);
 		$this->assertEquals($expected, $actual);
 
 		$a->minimize();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/big/minimized'));
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/first/minimized'));
 		$actual = Strings::normalize((string) $a);
 		$this->assertEquals($expected, $actual);
 
-		$b = $this->createSmallAutomaton()->determinize();
-		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/small/determinized'));
+		$b = $this->createSecondAutomaton()->determinize();
+		$expected = Strings::normalize(file_get_contents('safe://' . __DIR__ . '/rendering/second/determinized'));
 		$actual = Strings::normalize((string) $b);
 		$this->assertEquals($expected, $actual);
 	}
 
 
 
-	// === HELPERS ====================================================
+	// === TESTING AUTOMATONS ====================================================
 
-	protected function createBigAutomaton()
+	protected function createFirstAutomaton()
 	{
 		return new Automaton\Automaton(array(
 			'0' => array(
@@ -449,7 +491,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 
 
 
-	protected function createSmallAutomaton()
+	protected function createSecondAutomaton()
 	{
 		return new Automaton\Automaton(array(
 			'1' => array(
@@ -466,6 +508,38 @@ class BasicTest extends PHPUnit_Framework_TestCase
 			),
 
 		), array('1', '2'), array('1'));
+	}
+
+
+
+	protected function createThirdAutomaton()
+	{
+		return new Automaton\Automaton(array(
+			'q1' => array(
+				'0' => array('q3'),
+				'1' => array('q2'),
+			),
+			'q2' => array(
+				'0' => array('q4'),
+				'1' => array('q2'),
+			),
+			'q3' => array(
+				'0' => array('q4'),
+				'1' => array('q3'),
+			),
+			'q4' => array(
+				'0' => array('q4'),
+				'1' => array('q4'),
+			),
+
+		), array('q1'), array('q2', 'q3'));
+	}
+
+
+
+	protected function createFourthAutomaton()
+	{
+		// ...
 	}
 
 }

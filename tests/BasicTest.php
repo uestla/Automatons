@@ -23,6 +23,7 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(Helpers::isSubsetOf(array('1', '2', '4'), array('3', '2', '1', '3')));
 
 		$this->assertEquals('[]', Helpers::statesToString(array()));
+		$this->assertEquals(array(), Helpers::stringToStates('[]'));
 		$this->assertEquals('[1, 2, 3]', Helpers::statesToString(array('1', '2', '3')));
 		$this->assertEquals(array('1', '2', '3'), Helpers::stringToStates('[1, 2, 3]'));
 
@@ -138,6 +139,53 @@ class BasicTest extends PHPUnit_Framework_TestCase
 		$a->determinize();
 		$this->assertTrue($a->isDeterministic());
 		$this->assertEquals($a, $a->determinize());
+
+
+		$b = new Automaton\Automaton(array(
+			'1' => array(
+				'a' => array(),
+				'b' => array('2', '3'),
+			),
+			'2' => array(
+				'a' => array('2', '3'),
+				'b' => array('3'),
+			),
+			'3' => array(
+				'a' => array('1'),
+				'b' => array(),
+			),
+
+		), array('1', '2'), array('1'));
+
+		$b->determinize();
+
+		$this->assertEquals(new Automaton\Automaton(array(
+			'[1, 2]' => array(
+				'a' => array('[2, 3]'),
+				'b' => array('[2, 3]'),
+			),
+			'[2, 3]' => array(
+				'a' => array('[1, 2, 3]'),
+				'b' => array('[3]'),
+			),
+			'[1, 2, 3]' => array(
+				'a' => array('[1, 2, 3]'),
+				'b' => array('[2, 3]'),
+			),
+			'[3]' => array(
+				'a' => array('[1]'),
+				'b' => array('[]'),
+			),
+			'[1]' => array(
+				'a' => array('[]'),
+				'b' => array('[2, 3]'),
+			),
+			'[]' => array(
+				'a' => array('[]'),
+				'b' => array('[]'),
+			),
+
+		), array('[1, 2]'), array('[1, 2]', '[1, 2, 3]', '[1]')), $b);
 	}
 
 

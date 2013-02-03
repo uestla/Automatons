@@ -77,6 +77,7 @@ abstract class Helpers
 			throw new InvalidInputException("Invalid string format.");
 		}
 
-		return explode(', ', substr($s, 1, -1));
+		$s = substr($s, 1, -1);
+		return strlen($s) ? explode(', ', $s) : array();
 	}
 }

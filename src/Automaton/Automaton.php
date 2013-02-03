@@ -246,7 +246,7 @@ class Automaton
 
 		foreach ($this->transitions as $transitions) {
 			foreach ($transitions as $targets) {
-				if (count($targets) > 1) {
+				if (count($targets) !== 1) {
 					$this->isDeterministic = FALSE;
 					return ;
 				}

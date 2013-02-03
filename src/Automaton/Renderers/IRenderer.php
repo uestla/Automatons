@@ -15,6 +15,11 @@ namespace Automaton\Renderers;
 use Automaton\Automaton;
 
 
+/**
+ * Interface for automaton rendering
+ *
+ * @author Petr Kessler
+ */
 interface IRenderer
 {
 	/**

@@ -13,6 +13,11 @@
 namespace Automaton;
 
 
+/**
+ * Helpers for simple arrays and string operations.
+ *
+ * @author Petr Kessler
+ */
 abstract class Helpers
 {
 	/**

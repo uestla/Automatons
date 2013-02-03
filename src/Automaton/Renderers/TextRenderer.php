@@ -15,6 +15,11 @@ namespace Automaton\Renderers;
 use Automaton\Automaton;
 
 
+/**
+ * Renders automaton as a textual table
+ *
+ * @author Petr Kessler
+ */
 class TextRenderer implements IRenderer
 {
 	const SYMBOL_INITIAL = '=>';

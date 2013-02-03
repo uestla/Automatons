@@ -15,6 +15,17 @@ namespace Automaton;
 require_once __DIR__ . '/exceptions.php';
 
 
+/**
+ * Creates and manipulates with (non-)deterministic automatons
+ *
+ * - removes epsilon transitions
+ * - determinizes automaton
+ * - minimizes automaton
+ * - normalizes automaton
+ * - compares two automatons
+ *
+ * @author Petr Kessler
+ */
 class Automaton
 {
 	/** @var array */
@@ -406,6 +417,20 @@ class Automaton
 
 
 	// === OPERATIONS ======================================================
+
+	/**
+	 * @param  Automaton
+	 * @return bool
+	 */
+	function isEqual(Automaton $a)
+	{
+		$a = clone $a;
+		$b = clone $this;
+
+		return $a->normalize() == $b->normalize(); // intentionally ==
+	}
+
+
 
 	/** @return Automaton */
 	function getComplement()

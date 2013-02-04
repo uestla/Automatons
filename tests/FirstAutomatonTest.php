@@ -222,10 +222,12 @@ class FirstAutomatonTest extends PHPUnit_Framework_TestCase
 	function testComplement()
 	{
 		$a = static::createAutomaton()->getComplement();
+		$expected = new Automaton\Automaton(
+			static::createAutomaton()->getTransitions(),
+			'0', array('0', '1', '2', '4', '5')
+		);
 
-		$this->assertEquals(new Automaton\Automaton(
-				static::createAutomaton()->getTransitions(),
-				'0', array('0', '1', '2', '4', '5')), $a);
+		$this->assertEquals($expected, $a);
 	}
 
 

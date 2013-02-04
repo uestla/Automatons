@@ -418,7 +418,11 @@ class Automaton
 	{
 		$a = clone $this;
 
-		return new Automaton($a->getTransitions(), $a->getInitials(), array_diff($a->getStates(), $a->getFinals()));
+		return new static(
+			$a->getTransitions(),
+			$a->getInitials(),
+			array_diff($a->getStates(), $a->getFinals())
+		);
 	}
 
 

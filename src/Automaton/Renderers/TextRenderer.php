@@ -41,8 +41,7 @@ class TextRenderer implements IRenderer
 		$widths['symbols'] = array();
 
 		foreach (static::getSymbols($a) as $symbol) {
-			$out = static::getOutSymbol($symbol);
-			$names = array($out); // symbol may be longer than the longest state name
+			$names = array(static::getOutSymbol($symbol)); // symbol may be longer than the longest state name
 			foreach ($a->getTransitions() as $transitions) {
 				$names[] = static::statesToString($a, $transitions[$symbol]);
 			}

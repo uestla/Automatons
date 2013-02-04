@@ -1,7 +1,7 @@
 <?php
 
 
-class SeventhAutomatonTest extends PHPUnit_Framework_TestCase
+class InputTest extends PHPUnit_Framework_TestCase
 {
 
 	// === INPUT TESTING ====================================================

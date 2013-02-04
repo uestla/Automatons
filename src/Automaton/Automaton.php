@@ -447,12 +447,6 @@ class Automaton
 		}
 
 		while (strlen($input)) {
-			foreach ($currents as $state => $foo) {
-				foreach ($this->epsilonClosure($state) as $target) {
-					$currents[$target] = TRUE;
-				}
-			}
-
 			// find the symbol from alphabet to read
 			foreach ($this->alphabet as $symbol => $foo) {
 				if (substr($input, 0, strlen($symbol)) === $symbol) {
@@ -463,6 +457,12 @@ class Automaton
 
 					$input = substr($input, strlen($symbol));
 					$currents = Helpers::valuesToKeys($next);
+					foreach ($currents as $state => $foo) {
+						foreach ($this->epsilonClosure($state) as $target) {
+							$currents[$target] = TRUE;
+						}
+					}
+
 					continue 2; // read next symbol
 				}
 			}

@@ -447,7 +447,7 @@ class Automaton
 		}
 
 		while (strlen($input)) {
-			// find the symbol from alphabet to read
+			// find the symbol to read
 			foreach ($this->alphabet as $symbol => $foo) {
 				if (substr($input, 0, strlen($symbol)) === $symbol) {
 					$next = array();

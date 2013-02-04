@@ -148,4 +148,14 @@ class CreationTest extends PHPUnit_Framework_TestCase
 		} catch (Automaton\StateNotFoundException $e) {}
 	}
 
+
+
+	function testVariableTypes()
+	{
+		new Automaton\Automaton(array('0' => array('a' => array('0'))), array('0'), array('0'));
+		new Automaton\Automaton(array('0' => array('a' => '0')), array('0'), array('0'));
+		new Automaton\Automaton(array('0' => array('a' => '0')), '0', array('0'));
+		new Automaton\Automaton(array('0' => array('a' => '0')), '0', '0');
+	}
+
 }

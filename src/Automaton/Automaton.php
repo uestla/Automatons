@@ -78,9 +78,9 @@ class Automaton
 	 *
 	 * @param  array states array (see structure above)
 	 * @param  array|string single initial state or non-empty set of initial states
-	 * @param  array (possibly empty) set of final states
+	 * @param  array|string single final state or (possibly empty) set of final states
 	 */
-	function __construct(array $states, $initials, array $finals)
+	function __construct(array $states, $initials, $finals)
 	{
 		$names = array_keys($states);
 		$this->states = Helpers::valuesToKeys($names);
@@ -97,6 +97,7 @@ class Automaton
 			throw new StateNotFoundException("Initial state set is not a subset of state set.");
 		}
 
+		$finals = (array) $finals;
 		if (!Helpers::isSubsetOf($finals, $names)) {
 			throw new StateNotFoundException("Final state set is not a subset of state set.");
 		}

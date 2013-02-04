@@ -107,6 +107,10 @@ class Automaton
 
 		$this->transitions = array();
 		foreach ($states as $state => $transitions) {
+			if (!is_array($transitions)) {
+				throw new InvalidInputException("State '$state' transitions - array expected, '" . gettype($transitions) . "' given.");
+			}
+
 			if ($this->alphabet === NULL) {
 				$this->alphabet = Helpers::valuesToKeys(array_keys($transitions));
 				unset($this->alphabet[static::EPSILON]);

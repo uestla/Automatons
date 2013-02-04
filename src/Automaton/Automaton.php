@@ -426,7 +426,7 @@ class Automaton
 
 	/**
 	 * TODO: multiple symbol reading possibilities:
-	 * - imagine having alphabet {a, aa, b}
+	 * - imagine having alphabet {a, aa}
 	 * - then reading string 'aaa' could be made in 3 ways:
 	 *		1) read 'a', read 'a', read 'a'
 	 *		2) read 'a', read 'aa'

@@ -1,6 +1,7 @@
 TODO list
 ---------
 
+- state name restrictions docs
 - factories:
 	- file factory, string factory...
 - checkInput()

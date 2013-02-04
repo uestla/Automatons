@@ -20,6 +20,12 @@ class SeventhAutomatonTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(static::createSecondAutomaton()->testInput('bbb'));
 
 		$this->assertFalse(static::createSecondAutomaton()->testInput('a'));
+		$this->assertFalse(static::createSecondAutomaton()->testInput('ěřýěéščřá'));
+
+
+		$this->assertFalse(static::createThirdAutomaton()->testInput(''));
+		$this->assertFalse(static::createThirdAutomaton()->testInput('a'));
+		$this->assertFalse(static::createThirdAutomaton()->testInput('bbb'));
 	}
 
 
@@ -72,6 +78,35 @@ class SeventhAutomatonTest extends PHPUnit_Framework_TestCase
 			),
 
 		), array('1', '3'), array('1', '5'));
+	}
+
+
+
+	protected static function createThirdAutomaton()
+	{
+		return new Automaton\Automaton(array(
+			'1' => array(
+				'a' => array('2', '4', '3'),
+				'b' => array('1'),
+			),
+			'2' => array(
+				'a' => array(),
+				'b' => array('5'),
+			),
+			'3' => array(
+				'a' => array(),
+				'b' => array('4'),
+			),
+			'4' => array(
+				'a' => array('2'),
+				'b' => array('3', '5'),
+			),
+			'5' => array(
+				'a' => array(),
+				'b' => array('5'),
+			),
+
+		), array('1', '3'), array());
 	}
 
 }

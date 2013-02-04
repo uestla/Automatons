@@ -43,10 +43,10 @@ class Automaton
 	/** @var array */
 	protected $finals = NULL;
 
+
+
 	/** @var bool */
 	protected $hasEpsilon;
-
-
 
 	/** @var bool */
 	protected $isDeterministic = NULL;

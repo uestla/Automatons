@@ -221,27 +221,11 @@ class FirstAutomatonTest extends PHPUnit_Framework_TestCase
 
 	function testComplement()
 	{
-		$a = static::createAutomaton()->minimize()->getComplement();
+		$a = static::createAutomaton()->getComplement();
 
-		$this->assertEquals(new Automaton\Automaton(array(
-			'1' => array(
-				'a' => '2',
-				'b' => '3',
-			),
-			'2' => array(
-				'a' => '4',
-				'b' => '4',
-			),
-			'3' => array(
-				'a' => '4',
-				'b' => '3',
-			),
-			'4' => array(
-				'a' => '4',
-				'b' => '4',
-			),
-
-		), array('1'), array('1', '2', '3')), $a);
+		$this->assertEquals(new Automaton\Automaton(
+				static::createAutomaton()->getTransitions(),
+				'0', array('0', '1', '2', '4', '5')), $a);
 	}
 
 

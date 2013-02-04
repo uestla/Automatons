@@ -440,11 +440,17 @@ class Automaton
 	function testInput($input)
 	{
 		$currents = $this->initials;
+		foreach ($currents as $state => $foo) {
+			foreach ($this->epsilonClosure($state) as $target) {
+				$currents[$target] = TRUE;
+			}
+		}
 
 		while (strlen($input)) {
-			$eps = array();
 			foreach ($currents as $state => $foo) {
-				$eps[$state] = $this->epsilonClosure($state);
+				foreach ($this->epsilonClosure($state) as $target) {
+					$currents[$target] = TRUE;
+				}
 			}
 
 			// find the symbol from alphabet to read

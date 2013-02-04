@@ -439,6 +439,10 @@ class Automaton
 	 */
 	function testInput($input)
 	{
+		if (!count($this->finals)) {
+			return FALSE;
+		}
+
 		$currents = $this->initials;
 		foreach ($currents as $state => $foo) {
 			foreach ($this->epsilonClosure($state) as $target) {

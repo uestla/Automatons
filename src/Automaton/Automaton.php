@@ -392,6 +392,9 @@ class Automaton
 			$finals[$map[$state]] = TRUE;
 		}
 
+		$this->initials = $initials;
+		$this->finals = $finals;
+
 		return $this;
 	}
 

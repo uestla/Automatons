@@ -351,8 +351,8 @@ class Automaton
 
 		$alphabet = $this->alphabet;
 		ksort($alphabet);
-		$i = '1';
-		$map = array(reset($this->initials) => $i);
+		$i = 1;
+		$map = array(reset($this->initials) => (string) $i);
 		$stateCount = count($this->states);
 
 		$queue = $this->initials;
@@ -474,9 +474,8 @@ class Automaton
 			return FALSE; // no symbol from alphabet found
 		}
 
-		// is at least in one final state?
 		foreach ($currents as $state => $foo) {
-			if (isset($this->finals[$state])) {
+			if (isset($this->finals[$state])) { // we're in final state
 				return TRUE;
 			}
 		}

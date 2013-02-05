@@ -457,7 +457,9 @@ class Automaton
 		$configurations = array();
 		foreach ($this->initials as $state => $foo) {
 			foreach ($this->epsilonClosure($state) as $target) {
-				$configurations[] = array($target, $input);
+				if (!in_array(array($target, $input), $configurations, TRUE)) {
+					$configurations[] = array($target, $input);
+				}
 			}
 		}
 

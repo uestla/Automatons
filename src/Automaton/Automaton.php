@@ -71,6 +71,8 @@ class Automaton
 	 *		'symbol' => array('state2', 'state3')
 	 *		or
 	 *		'symbol' => 'state2'
+	 *		or
+	 *		'symbol' => array()
 	 *	)
 	 * )
 	 * </code>

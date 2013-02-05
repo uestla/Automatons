@@ -6,10 +6,20 @@ class EqualityTest extends PHPUnit_Framework_TestCase
 
 	// === OPERATIONS ====================================================
 
-	function testEquality()
+	function testFormalEquality()
 	{
 		$this->assertTrue(static::createFirstAutomaton()->equals(static::createFirstAutomaton()));
 		$this->assertTrue(static::createFirstAutomaton()->equals(static::createSecondAutomaton()));
+	}
+
+
+
+	function testNormalization()
+	{
+		$this->assertEquals(
+			static::createFirstAutomaton()->normalize(),
+			static::createSecondAutomaton()->normalize()
+		);
 	}
 
 

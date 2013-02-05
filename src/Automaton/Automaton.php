@@ -68,16 +68,16 @@ class Automaton
 	 * <code>
 	 * array(
 	 *	'state1' => array(
-	 *		'symbol' => array('state2', 'state3')
-	 *		or
-	 *		'symbol' => 'state2'
-	 *		or
-	 *		'symbol' => array()
+	 *		'symbol' => array('state2', 'state3') // multiple transition
+	 *		// or
+	 *		'symbol' => 'state2' // single transition
+	 *		// or
+	 *		'symbol' => array() // empty transition
+	 *		// or
+	 *		'' => array('state3') // epsilon transition
 	 *	)
 	 * )
 	 * </code>
-	 *
-	 * Empty string as a symbol means epsilon transition
 	 *
 	 * @param  array states array (see structure above)
 	 * @param  array|string single initial state or non-empty set of initial states

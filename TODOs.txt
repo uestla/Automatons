@@ -2,7 +2,7 @@ TODO list
 ---------
 
 - separate alphabet definition:
-	- alphabet: array('a', 'b')
+	- alphabet: array('a', 'b') ... must not have an epsilon symbol
 	- then it could be possible to set transitions as:
 		array(
 			'q0' => array() ... will be mapped as 'q0' => array('a' => array(), 'b' => array())

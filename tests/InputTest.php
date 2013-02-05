@@ -47,6 +47,9 @@ class InputTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(static::createMultiSymbolAutomaton()->testInput('aa'));
 		$this->assertTrue(static::createMultiSymbolAutomaton()->testInput('aaa'));
 		$this->assertTrue(static::createMultiSymbolAutomaton()->testInput('aaaa'));
+
+		$this->assertTrue(static::createSecondMultiSymbolAutomaton()->testInput('ab'));
+		$this->assertFalse(static::createSecondMultiSymbolAutomaton()->testInput('a'));
 	}
 
 
@@ -173,6 +176,23 @@ class InputTest extends PHPUnit_Framework_TestCase
 			),
 
 		), '1', array('1', '2'));
+	}
+
+
+
+	protected static function createSecondMultiSymbolAutomaton()
+	{
+		return new Automaton\Automaton(array(
+			'1' => array(
+				'a' => '1',
+				'ab' => '2',
+			),
+			'2' => array(
+				'a' => array(),
+				'ab' => array(),
+			),
+
+		), '1', '2');
 	}
 
 }

@@ -467,11 +467,11 @@ class Automaton
 					if (substr($input, 0, strlen($symbol)) === $symbol) {
 						$sub = substr($input, strlen($symbol)) ?: ''; // pop the symbol
 						foreach ($this->transitions[$state][$symbol] as $target) {
-							foreach ($this->epsilonClosure($target) as $t) {
-								if ($sub === '') {
+							foreach ($this->epsilonClosure($target) as $t) { // get all transitions from $state on $symbol
+								if ($sub === '') { // end of string
 									$finals[$t] = TRUE;
 
-								} elseif (!in_array(array($t, $sub), $next, TRUE)) {
+								} elseif (!in_array(array($t, $sub), $next, TRUE)) { // new configuration
 									$next[] = array($t, $sub);
 								}
 							}

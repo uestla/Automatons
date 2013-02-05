@@ -68,11 +68,11 @@ class Automaton
 	 * <code>
 	 * array(
 	 *	'state1' => array(
-	 *		'symbol' => array('state2', 'state3') // multiple transition
+	 *		'symbol' => array('state2', 'state3') // multiple transitions
 	 *		// or
 	 *		'symbol' => 'state2' // single transition
 	 *		// or
-	 *		'symbol' => array() // empty transition
+	 *		'symbol' => array() // no transitions
 	 *		// or
 	 *		'' => array('state3') // epsilon transition
 	 *	)

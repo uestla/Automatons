@@ -468,7 +468,12 @@ class Automaton
 						$sub = substr($input, strlen($symbol)) ?: ''; // pop the symbol
 						foreach ($this->transitions[$state][$symbol] as $target) {
 							foreach ($this->epsilonClosure($target) as $t) {
-								$sub === '' ? ($finals[$t] = TRUE) : ($next[] = array($t, $sub));
+								if ($sub === '') {
+									$finals[$t] = TRUE;
+
+								} elseif (!in_array(array($t, $sub), $next, TRUE)) {
+									$next[] = array($t, $sub);
+								}
 							}
 						}
 					}

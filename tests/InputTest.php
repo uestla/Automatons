@@ -27,6 +27,21 @@ class InputTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(static::createThirdAutomaton()->testInput('a'));
 		$this->assertFalse(static::createThirdAutomaton()->testInput('bbb'));
 
+
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput(''));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('a'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('b'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('c'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('ab'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('bc'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('ac'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('aaa'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('abc'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('abc'));
+		$this->assertTrue(static::createEpsilonAutomaton()->testInput('aaabbc'));
+		$this->assertTrue(static::createEpsilonAutomaton()->normalize()->testInput('aaabbc'));
+
+
 		$this->assertTrue(static::createMultiSymbolAutomaton()->testInput(''));
 		$this->assertTrue(static::createMultiSymbolAutomaton()->testInput('a'));
 		$this->assertTrue(static::createMultiSymbolAutomaton()->testInput('aa'));
@@ -113,6 +128,33 @@ class InputTest extends PHPUnit_Framework_TestCase
 			),
 
 		), array('1', '3'), array());
+	}
+
+
+
+	protected static function createEpsilonAutomaton()
+	{
+		return new Automaton\Automaton(array(
+			'q0' => array(
+				'a' => 'q0',
+				'b' => array(),
+				'c' => array(),
+				'' => 'q1',
+			),
+			'q1' => array(
+				'a' => array(),
+				'b' => 'q1',
+				'c' => array(),
+				'' => 'q2',
+			),
+			'q2' => array(
+				'a' => array(),
+				'b' => array(),
+				'c' => 'q2',
+				'' => array(),
+			),
+
+		), 'q0', 'q2');
 	}
 
 

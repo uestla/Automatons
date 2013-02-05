@@ -1,6 +1,24 @@
 TODO list
 ---------
 
+- separate alphabet definition:
+	- alphabet: array('a', 'b')
+	- then it could be possible to set transitions as:
+		array(
+			'q0' => array() ... will be mapped as 'q0' => array('a' => array(), 'b' => array())
+			'q1' => array('a' => 'q0') ... will be mapped as 'q0' => array('a' => 'q0', 'b' => array())
+			...
+		)
+
+		after transitions processing check whether in any of them epsilon transitions occured, then map all of them as
+		array(
+			'state' => array(
+				<originals>
+				'' => array(),
+			),
+			...
+		)
+
 - state name restrictions docs
 - factories:
 	- file factory, string factory...

@@ -23,6 +23,7 @@ require_once __DIR__ . '/exceptions.php';
  * - minimizes automaton
  * - normalizes automaton
  * - compares two automatons
+ * - tests input strings
  *
  * @author Petr Kessler
  */
@@ -85,7 +86,7 @@ class Automaton
 		$names = array_keys($states);
 		$this->states = Helpers::valuesToKeys($names);
 		if (!count($states)) {
-			throw new InvalidStateSetException("Set of states cannot be empty.");
+			throw new InvalidStateSetException("Transitions set cannot be empty.");
 		}
 
 		$initials = (array) $initials;

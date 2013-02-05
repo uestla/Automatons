@@ -428,15 +428,6 @@ class Automaton
 
 
 	/**
-	 * TODO: multiple symbol reading possibilities:
-	 * - imagine having alphabet {a, aa}
-	 * - then reading string 'aaa' could be made in 3 ways:
-	 *		1) read 'a', read 'a', read 'a'
-	 *		2) read 'a', read 'aa'
-	 *		3) read 'aa', read 'a'
-	 * - in that case input testing has to be done in multiple "threads"
-	 * - multiple configuration sets have to be reflected
-	 *
 	 * @param  string
 	 * @return bool
 	 */
@@ -446,39 +437,53 @@ class Automaton
 			return FALSE;
 		}
 
-		$currents = $this->initials;
-		foreach ($currents as $state => $foo) {
-			foreach ($this->epsilonClosure($state) as $target) {
-				$currents[$target] = TRUE;
-			}
-		}
-
-		while (strlen($input)) {
-			// find the symbol to read
-			foreach ($this->alphabet as $symbol => $foo) {
-				if (substr($input, 0, strlen($symbol)) === $symbol) {
-					$next = array();
-					foreach ($currents as $state => $foo) {
-						$next = array_merge($next, $this->transitions[$state][$symbol]);
+		if (!strlen($input)) {
+			foreach ($this->initials as $state => $foo) {
+				foreach ($this->epsilonClosure($state) as $target) {
+					if (isset($this->finals[$target])) {
+						return TRUE;
 					}
-
-					$input = substr($input, strlen($symbol));
-					$currents = Helpers::valuesToKeys($next);
-					foreach ($currents as $state => $foo) {
-						foreach ($this->epsilonClosure($state) as $target) {
-							$currents[$target] = TRUE;
-						}
-					}
-
-					continue 2; // read next symbol
 				}
 			}
 
-			return FALSE; // no symbol from alphabet found
+			return FALSE;
 		}
 
-		foreach ($currents as $state => $foo) {
-			if (isset($this->finals[$state])) { // we're in final state
+
+		// initial configurations
+		$configurations = array();
+		foreach ($this->initials as $state => $foo) {
+			foreach ($this->epsilonClosure($state) as $target) {
+				$configurations[] = array($target, $input);
+			}
+		}
+
+		$finals = array();
+		while (TRUE) {
+			$next = array();
+			foreach ($configurations as $c) {
+				list ($state, $input) = $c;
+				foreach ($this->alphabet as $symbol => $foo) {
+					if (substr($input, 0, strlen($symbol)) === $symbol) {
+						$sub = substr($input, strlen($symbol)) ?: ''; // pop the symbol
+						foreach ($this->transitions[$state][$symbol] as $target) {
+							foreach ($this->epsilonClosure($target) as $t) {
+								$sub === '' ? ($finals[$t] = TRUE) : ($next[] = array($t, $sub));
+							}
+						}
+					}
+				}
+			}
+
+			if (!count($next)) { // invalid input symbol or the end of all inputs
+				break;
+			}
+
+			$configurations = $next;
+		}
+
+		foreach ($finals as $state => $foo) {
+			if (isset($this->finals[$state])) {
 				return TRUE;
 			}
 		}

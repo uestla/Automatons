@@ -1,7 +1,17 @@
 TODO list
 ---------
 
-- separate alphabet definition:
+- change definition:
+	$a = Automaton\Automaton::create()
+		->setAlphabet(array('a', 'b'))
+		->addState('q0', // state name
+			array( // transitions
+				'a' => 'q1' // <scalar value for symbol constructor> => <values for target state constructor>
+			)
+		)
+		->setFinals() // array of names or State instances
+		->setInitials() // array of names or State instances
+- [obsolete] separate alphabet definition:
 	- alphabet: array('a', 'b') ... must not have an epsilon symbol
 	- then it could be possible to set transitions as:
 		array(

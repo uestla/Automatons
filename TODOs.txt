@@ -1,6 +1,21 @@
 TODO list
 ---------
 
+(ideas)
+
+$builder = new AutomatonBuilder;
+$automaton = $builder->setAlphabet(array('a', 'b', 'c'))
+	->addState('q0', array(
+		'a' => 'q1',
+	))
+	->addState('q1')
+	->setInitials('q1')
+	->setFinals('q0', 'q1')
+	->createAutomaton();
+
+
+
+[obsolete]
 - change definition:
 	$a = Automaton\Automaton::create()
 		->setAlphabet(array('a', 'b'))
